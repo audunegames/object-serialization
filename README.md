@@ -4,7 +4,7 @@
 
 Custom and extensible object serialization for Unity, using intermediate state classes.
 
-See the [wiki](https://github.com/audunegames/pickle/wiki) of the repository to get started with the package.
+See the [wiki](https://github.com/audunegames/object-serialization/wiki) of the repository to get started with the package.
 
 ## Features
 
