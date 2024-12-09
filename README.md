@@ -8,7 +8,7 @@ See the [wiki](https://github.com/audunegames/pickle/wiki) of the repository to 
 
 ## Features
 
-* Serialize and deserialize primtive values and Unity struct to and from intermediate state classes respectively. Easily create your own serializable classes and structs by implementing the `ISerializable` interface and crafting a state structure reminiscent of JSON.
+* Serialize and deserialize primtive values and Unity structs to and from intermediate state classes respectively. Easily create your own serializable classes and structs by implementing the `ISerializable` interface and crafting a state structure reminiscent of JSON.
 * Encode and decode states and objects that can be serialized to states to a string or byte array for storage on a filesystem or sending over a network.
 * Use the [Object Persistence package](https://github.com/audunegames/object-persistence) for a higher-level library to save and load states to and from the filesystem, repsectively, or any other filesystem adapter.
 
