@@ -7,7 +7,7 @@ namespace Audune.Serialization
     public T Deserialize<T>(State state);
 
     // Deserialize the specified state into an existing object
-    public void Deserialize<T>(State state, ref T value)
+    public void Deserialize<T>(State state, T value)
     {
       value = Deserialize<T>(state);
     }

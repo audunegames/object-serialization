@@ -7,12 +7,15 @@ namespace Audune.Serialization
     public State ToState(T value);
 
     // Convert the specified state to a value
-    public T FromState(State state);
+    public T FromState(State state)
+    {
+      throw new StateException($"Type adapter {GetType()} does not support deserializing states to new objects");
+    }
 
     // Convert the specified state into an existing value
-    public void FromState(State state, ref T value)
+    public void FromState(State state, T value)
     {
-      value = FromState(state);
+      throw new StateException($"Type adapter {GetType()} does not support deserializing states into existing objects");
     }
   }
 }

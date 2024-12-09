@@ -23,7 +23,7 @@ namespace Audune.Serialization
     }
     
     // Convert the specified compound state into an existing value
-    public void FromCompoundState(IReadOnlyList<ValueState> states, ref Quaternion value)
+    public void FromCompoundState(IReadOnlyList<ValueState> states, Quaternion value)
     {
       value.Set((float)states[0], (float)states[1], (float)states[2], (float)states[3]);
     }

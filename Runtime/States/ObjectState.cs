@@ -43,7 +43,7 @@ namespace Audune.Serialization
 
 
     // Get a field with the specified name
-    public State Get(string name, State defaultValue)
+    public State Get(string name, State defaultValue = null)
     {
       return _fields.TryGetValue(name, out var state) ? state : defaultValue;
     }
@@ -52,7 +52,7 @@ namespace Audune.Serialization
     public bool TryGet(string name, out State value)
     {
       var inRange = _fields.ContainsKey(name);
-      value = inRange ? ((IObjectState)this).Get(name) : null;
+      value = inRange ? _fields[name] : null;
       return inRange;
     }
 

@@ -17,9 +17,9 @@ namespace Audune.Serialization
     public T FromCompoundState(IReadOnlyList<ValueState> states);
 
     // Convert the specified compound state into an existing value
-    public void FromCompoundState(IReadOnlyList<ValueState> states, ref T value)
+    public void FromCompoundState(IReadOnlyList<ValueState> states, T value)
     {
-      value = FromCompoundState(states);
+      throw new StateException($"Type adapter {GetType()} does not support deserializing states into existing objects");
     }
 
 
@@ -42,7 +42,7 @@ namespace Audune.Serialization
     }
 
     // Convert the specified state into an existing value
-    void ITypeAdapter<T>.FromState(State state, ref T value)
+    void ITypeAdapter<T>.FromState(State state, T value)
     {
       if (state is not CompoundExtensionState states)
         throw new InvalidOperationException($"Expected state of type {typeof(CompoundExtensionState)}, but got {state.GetType()}");
@@ -50,7 +50,7 @@ namespace Audune.Serialization
       if (states.type != extensionType)
         throw new InvalidOperationException($"Expected state with compound type {extensionType}, but got {states.type}");
 
-      FromCompoundState(states.states, ref value);
+      FromCompoundState(states.states, value);
     }
   }
 }

@@ -67,36 +67,37 @@ namespace Audune.Serialization
     }
 
 
-    #region Managing compound types
-    // Register the specified compound type
-    public void RegisterExtensionType(ExtensionType compoundType)
+    #region Managing extension types
+    // Register the specified extension type
+    public void RegisterExtensionType(ExtensionType extensionType)
     {
-      _compoundTypes.Add(compoundType.code, compoundType);
+      _compoundTypes.Add(extensionType.code, extensionType);
     }
 
-    // Register all specified compound types
-    public void RegisterCompoundTypes(IEnumerable<ExtensionType> compoundTypes)
+    // Register all specified extension types
+    public void RegisterExtensionTypes(IEnumerable<ExtensionType> extensionTypes)
     {
-      
+      foreach (var compoundType in extensionTypes)
+        RegisterExtensionType(compoundType);
     }
 
-    // Unregister the specified compound type
-    public void UnregisterExtensionType(ExtensionType compoundType)
+    // Unregister the specified extension type
+    public void UnregisterExtensionType(ExtensionType extensionType)
     {
-      _compoundTypes.Remove(compoundType.code);
+      _compoundTypes.Remove(extensionType.code);
     }
 
-    // Unregister all specified compound types
-    public void UnregisterCompoundTypes(IEnumerable<ExtensionType> compoundTypes)
+    // Unregister all specified extension types
+    public void UnregisterExtensionTypes(IEnumerable<ExtensionType> extensionTypes)
     {
-      foreach (var compoundType in compoundTypes)
-        UnregisterExtensionType(compoundType);
+      foreach (var extensionType in extensionTypes)
+        UnregisterExtensionType(extensionType);
     }
 
     // Return if a compound type for the specified extension code exists and store the compound type
-    bool IExtensionTypeRegistry.TryGetExtensionTypeByCode(sbyte extensionCode, out ExtensionType compoundType)
+    bool IExtensionTypeRegistry.TryGetExtensionTypeByCode(sbyte extensionCode, out ExtensionType extensionType)
     {
-      return _compoundTypes.TryGetValue(extensionCode, out compoundType);
+      return _compoundTypes.TryGetValue(extensionCode, out extensionType);
     }
     #endregion
 
@@ -127,6 +128,9 @@ namespace Audune.Serialization
     // Serialize the specified object to a state
     public State Serialize<T>(T value)
     {
+      if (value is ISerializable serializableValue)
+        return serializableValue.Serialize(this);
+
       if (!TryGetTypeAdapter(typeof(T), out var typeAdapterObject))
         throw new SerializingException($"Unsupported object type {typeof(T)}");
 
@@ -139,6 +143,20 @@ namespace Audune.Serialization
     // Deserialize the specified state to a new object
     public T Deserialize<T>(State state)
     {
+      if (typeof(IDeserializable).IsAssignableFrom(typeof(T)))
+      {
+        try
+        {
+          var value = (T)Activator.CreateInstance(typeof(T));
+          ((IDeserializable)value).Deserialize(state, this);
+          return value;
+        }
+        catch (MissingMethodException ex)
+        {
+          throw new DeserializingException($"Deserializable type {typeof(T)} has no default constructor or is an abstract class", ex);
+        }
+      }
+
       if (!TryGetTypeAdapter(typeof(T), out var typeAdapterObject))
         throw new DeserializingException($"Unsupported object type {typeof(T)}");
 
@@ -147,9 +165,19 @@ namespace Audune.Serialization
     }
 
     // Deserialize the specified state into an existing object
-    public void Deserialize<T>(State state, ref T value)
+    public void Deserialize<T>(State state, T value)
     {
-      value = Deserialize<T>(state);
+      if (value is IDeserializable deserializableValue)
+      {
+        deserializableValue.Deserialize(state, this);
+        return;
+      }
+        
+      if (!TryGetTypeAdapter(typeof(T), out var typeAdapterObject))
+        throw new DeserializingException($"Unsupported object type {typeof(T)}");
+
+      var typeAdapter = typeAdapterObject as ITypeAdapter<T>;
+      typeAdapter.FromState(state, value);
     }
     #endregion
 
@@ -183,9 +211,10 @@ namespace Audune.Serialization
     }
 
     // Decode the specified byte array into an existing object
-    public void Decode<T>(byte[] data, ref T value)
+    public void Decode<T>(byte[] data, T value)
     {
-      value = Decode<T>(data);
+      var state = DecodeState(data);
+      Deserialize<T>(state, value);
     }
     #endregion
   }

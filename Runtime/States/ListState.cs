@@ -35,7 +35,7 @@ namespace Audune.Serialization
 
     
     // Get an item with the specified index
-    public State Get(int index, State defaultValue)
+    public State Get(int index, State defaultValue = null)
     {
       return index >= 0 && index < _items.Count ? _items[index] : defaultValue;
     }
@@ -44,7 +44,7 @@ namespace Audune.Serialization
     public bool TryGet(int index, out State value)
     {
       var inRange = index >= 0 && index < _items.Count;
-      value = inRange ? ((IListState)this).Get(index) : null;
+      value = inRange ? _items[index] : null;
       return inRange;
     }
 

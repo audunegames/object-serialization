@@ -14,9 +14,9 @@ namespace Audune.Serialization
     public T FromBytes(byte[] bytes);
 
     // Convert the specified byte array into an existing value
-    public void FromBytes(byte[] bytes, ref T value)
+    public void FromBytes(byte[] bytes, T value)
     {
-      value = FromBytes(bytes);
+      throw new StateException($"Type adapter {GetType()} does not support deserializing states into existing objects");
     }
 
 
@@ -39,7 +39,7 @@ namespace Audune.Serialization
     }
 
     // Convert the specified state into an existing value
-    void ITypeAdapter<T>.FromState(State state, ref T value)
+    void ITypeAdapter<T>.FromState(State state, T value)
     {
       if (state is not RawExtensionState rawState)
         throw new StateTypeException(typeof(RawExtensionState), state.GetType());
@@ -47,7 +47,7 @@ namespace Audune.Serialization
       if (rawState.type != extensionType)
         throw new StateException($"Expected state with extension type {extensionType}, but got {rawState.type}");
 
-      FromBytes(rawState.bytes, ref value);
+      FromBytes(rawState.bytes, value);
     }
   }
 }

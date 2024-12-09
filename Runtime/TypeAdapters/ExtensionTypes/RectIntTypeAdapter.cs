@@ -23,7 +23,7 @@ namespace Audune.Serialization
     }
 
     // Convert the specified compound state into an existing value
-    public void FromCompoundState(IReadOnlyList<ValueState> states, ref RectInt value)
+    public void FromCompoundState(IReadOnlyList<ValueState> states, RectInt value)
     {
       value.position.Set((int)states[0], (int)states[1]);
       value.size.Set((int)states[2], (int)states[3]);
