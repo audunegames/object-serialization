@@ -1,6 +1,6 @@
-# Audune Pickle Object Serialization
+# Audune Object Serialization
 
-[![openupm](https://img.shields.io/npm/v/com.audune.pickle?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.audune.pickle/)
+[![openupm](https://img.shields.io/npm/v/com.audune.serialization?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.audune.serialization/)
 
 Custom and extensible object serialization for Unity, using intermediate state classes.
 
@@ -10,14 +10,14 @@ See the [wiki](https://github.com/audunegames/pickle/wiki) of the repository to 
 
 * Serialize and deserialize primtive values and Unity struct to and from intermediate state classes respectively. Easily create your own serializable classes and structs by implementing the `ISerializable` interface and crafting a state structure reminiscent of JSON.
 * Encode and decode states and objects that can be serialized to states to a string or byte array for storage on a filesystem or sending over a network.
-* Use the [Persistence for Pickle package](https://github.com/audunegames/persistence) for a higher-level library to save and load states to and from the filesystem, repsectively, or any other filesystem adapter.
+* Use the [Object Persistence package](https://github.com/audunegames/object-persistence) for a higher-level library to save and load states to and from the filesystem, repsectively, or any other filesystem adapter.
 
 ### Supported serialization types
 
 * C# value types: `bool`, `byte`, `sbyte`, `ushort`, `short`, `uint`, `int`, `ulong`, `long`, `float`, `double`.
 * C# reference types: `string`, `byte[]`.
 * Unity structs: `Vector2`, `Vector3`, `Vector4`, `Vector2Int`, `Vector3Int`, `Color32`, `Color`, `Quaternion`, `Rect`, `Bounds`, `RectInt`, `BoundsInt`.
-* Any custom class that implements `Audune.Pickle.ISerializable`.
+* Any custom class that implements `Audune.Serialization.ISerializable`.
 
 ### Supported encoders
 
@@ -43,7 +43,7 @@ To install this package as a package from the OpenUPM registry in the Unity Edit
 ```
 Name:     package.openupm.com
 URL:      https://package.openupm.com
-Scope(s): com.audune.pickle
+Scope(s): com.audune.serialization
 ```
 
 * Navigate to **Window › Package Manager**.
@@ -51,7 +51,7 @@ Scope(s): com.audune.pickle
 * Enter the following name in the corresponding field and click **Add**:
 
 ```
-com.audune.pickle
+com.audune.serialization
 ```
 
 ### Installing as a Git package
@@ -63,7 +63,7 @@ To install this package as a Git package in the Unity Editor, use the following 
 * Enter the following URL in the URL field and click **Add**:
 
 ```
-https://github.com/audunegames/pickle.git
+https://github.com/audunegames/object-serialization.git
 ```
 
 ## License
