@@ -23,17 +23,17 @@ namespace Audune.Pickle
     // Convert the specified value to a state
     State ITypeAdapter<T>.ToState(T value)
     {
-      return new RawState(extensionType, ToBytes(value));
+      return new RawExtensionState(extensionType, ToBytes(value));
     }
 
     // Convert the specified state to a value
     T ITypeAdapter<T>.FromState(State state)
     {
-      if (state is not RawState rawState)
-        throw new StateTypeException(typeof(RawState), state.GetType());
+      if (state is not RawExtensionState rawState)
+        throw new StateTypeException(typeof(RawExtensionState), state.GetType());
 
-      if (rawState.extensionType != extensionType)
-        throw new StateException($"Expected state with extension type {extensionType}, but got {rawState.extensionType}");
+      if (rawState.type != extensionType)
+        throw new StateException($"Expected state with extension type {extensionType}, but got {rawState.type}");
 
       return FromBytes(rawState.bytes);
     }
@@ -41,11 +41,11 @@ namespace Audune.Pickle
     // Convert the specified state into an existing value
     void ITypeAdapter<T>.FromState(State state, ref T value)
     {
-      if (state is not RawState rawState)
-        throw new StateTypeException(typeof(RawState), state.GetType());
+      if (state is not RawExtensionState rawState)
+        throw new StateTypeException(typeof(RawExtensionState), state.GetType());
 
-      if (rawState.extensionType != extensionType)
-        throw new StateException($"Expected state with extension type {extensionType}, but got {rawState.extensionType}");
+      if (rawState.type != extensionType)
+        throw new StateException($"Expected state with extension type {extensionType}, but got {rawState.type}");
 
       FromBytes(rawState.bytes, ref value);
     }

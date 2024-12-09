@@ -2,8 +2,8 @@ using System;
 
 namespace Audune.Pickle
 {
-  // Class that defines extesion methods for objects to cast it to a different type
-  public static class TypeCaster
+  // Class that defines extension methods for objects to cast it to a different type
+  public static class Caster
   {
     // Enum that defines the result of a type cast
     public enum Result

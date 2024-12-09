@@ -29,7 +29,7 @@ namespace Audune.Pickle
           SerializeValueState(ref writer, valueState);
           break;
 
-        case CompoundState compoundState:
+        case CompoundExtensionState compoundState:
           SerializeCompoundState(ref writer, compoundState, options);
           break;
 
@@ -41,7 +41,7 @@ namespace Audune.Pickle
           SerializeObjectState(ref writer, objectState, options);
           break;
 
-        case RawState rawState:
+        case RawExtensionState rawState:
           SerializeRawState(ref writer, rawState, options);
           break;
 
@@ -86,7 +86,7 @@ namespace Audune.Pickle
     }
 
     // Serialize a compound state
-    private void SerializeCompoundState(ref MessagePackWriter writer, CompoundState state, MessagePackSerializerOptions options)
+    private void SerializeCompoundState(ref MessagePackWriter writer, CompoundExtensionState state, MessagePackSerializerOptions options)
     {
       var extensionBuffer = new ArrayBufferWriter<byte>();
       var extensionWriter = writer.Clone(extensionBuffer);
@@ -100,7 +100,7 @@ namespace Audune.Pickle
     // Serialize a list state
     private void SerializeListState(ref MessagePackWriter writer, ListState state, MessagePackSerializerOptions options)
     {
-      writer.WriteArrayHeader(state.Count);
+      writer.WriteArrayHeader(state.count);
       foreach (var item in state)
       {
         Serialize(ref writer, item, options);
@@ -110,7 +110,7 @@ namespace Audune.Pickle
     // Serialize an object state
     private void SerializeObjectState(ref MessagePackWriter writer, ObjectState state, MessagePackSerializerOptions options)
     {
-      writer.WriteMapHeader(state.Count);
+      writer.WriteMapHeader(state.count);
       foreach (var field in state)
       {
         writer.Write(field.Key);
@@ -119,14 +119,14 @@ namespace Audune.Pickle
     }
 
     // Serialize a raw state
-    private void SerializeRawState(ref MessagePackWriter writer, RawState state, MessagePackSerializerOptions options)
+    private void SerializeRawState(ref MessagePackWriter writer, RawExtensionState state, MessagePackSerializerOptions options)
     {
       var extensionBuffer = new ArrayBufferWriter<byte>();
       var extensionWriter = writer.Clone(extensionBuffer);
       extensionWriter.WriteRaw(state.bytes);
       extensionWriter.Flush();
 
-      writer.WriteExtensionFormat(new ExtensionResult(state.extensionType.code, new ReadOnlySequence<byte>(extensionBuffer.WrittenMemory)));
+      writer.WriteExtensionFormat(new ExtensionResult(state.type.code, new ReadOnlySequence<byte>(extensionBuffer.WrittenMemory)));
     }
     #endregion
 
@@ -234,19 +234,19 @@ namespace Audune.Pickle
             throw new StateException($"Expected extension length of {rawType.length}, but got {header.Length}");
 
           var bytes = reader.ReadRaw(header.Length).ToArray();
-          return new RawState(rawType, bytes);
+          return new RawExtensionState(rawType, bytes);
         }
         else if (type is CompoundExtensionType compoundType)
         {
           var states = new List<ValueState>();
-          for (var i = 0; i < compoundType.valueTypes.Count; i ++)
+          for (var i = 0; i < compoundType.fields.Length; i ++)
           {
             var state = Deserialize(ref reader, options);
             if (state is not ValueState valueState)
               throw new StateTypeException(typeof(ValueState), state.GetType());
             states.Add(valueState);
           }
-          return new CompoundState(compoundType, states);
+          return new CompoundExtensionState(compoundType, states);
         }
         else
         {

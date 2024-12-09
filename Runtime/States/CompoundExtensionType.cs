@@ -1,47 +1,48 @@
-using System;
 using System.Collections.Generic;
 
 namespace Audune.Pickle
 {
-  // Class that defines an extension type that matches a compound value state
+  // Class that defines an extension type that matches a compound extension state
   public class CompoundExtensionType : ExtensionType
   {
-    // The value types of the compound value extension type
-    private readonly Type[] _valueTypes;
-
-
-    // Return the value types of the compound value extension type
-    internal IReadOnlyList<Type> valueTypes => _valueTypes;
+    // The fields of the compound extension type
+    internal readonly Field[] fields;
 
 
     // Constructor
-    public CompoundExtensionType(sbyte code, params Type[] valueTypes) : base(code)
+    public CompoundExtensionType(sbyte code, params Field[] fields) : base(code)
     {
-      _valueTypes = valueTypes;
-    }
-
-    // Constructor that repeats the specified type for the specified count
-    public CompoundExtensionType(sbyte code, Type valueType, int count) : base(code)
-    {
-      _valueTypes = new Type[count];
-      Array.Fill(_valueTypes, valueType);
+      this.fields = fields;
     }
 
 
-    // Return if an array of value states matches the component type
-    internal void AssertMatches(params ValueState[] states)
+    // Return if the specified state array matches the types of the fields
+    internal void AssertFields(params ValueState[] states)
     {
       // Check if the lengths match
-      if (_valueTypes.Length != states.Length)
-        throw new StateException($"Expected {_valueTypes.Length} states, but got {states.Length}");
+      if (fields.Length != states.Length)
+        throw new StateException($"Expected {fields.Length} states, but got {states.Length}");
       
       // Iterate over the states
       for (int i = 0; i < states.Length; i ++)
       {
         // Check if the types match
-        if (!states[i].value.TryCast(_valueTypes[i]).IsSuccesful())
-          throw new StateException($"Expected value type of {_valueTypes[i]} at index {i}, but got {states[i].value.GetType()}");
+        if (!states[i].value.TryCast(fields[i].type).IsSuccesful())
+          throw new StateException($"Expected value of type {fields[i].type} at index {i}, but got {states[i].value.GetType()}");
       }
+    }
+
+    // Return a dictionary that maps the names of the fields to the specified state array
+    internal IDictionary<string, State> FillFields(params ValueState[] states)
+    {
+      // Assert the fields
+      AssertFields(states);
+
+      // Iterate over the fields and states and fill the dictionary
+      var dictionary = new Dictionary<string, State>();
+      for (var i = 0; i < fields.Length; i++)
+        dictionary.Add(fields[i].name, states[i]);
+      return dictionary;
     }
   }
 }

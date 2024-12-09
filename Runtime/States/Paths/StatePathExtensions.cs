@@ -7,104 +7,72 @@ namespace Audune.Pickle
   // Class that defines extensions for state paths
   public static class StatePathExtensions
   {
-    #region Getting a state from a path
+    #region State extensions
     // Get a state with the specified path in the specified state
-    public static TState GetAtPath<TState>(this State rootState, StatePath path) where TState : State
+    public static State GetAtPath(this State rootState, StatePath path) 
     {
-      return path.EvaluateGetter(rootState) as TState;
+      return path.EvaluateGetter(rootState);
     }
 
     // Return if a state with the specified path exists in the specified state
-    public static bool TryGetAtPath<TState>(this State rootState, StatePath path, out TState state) where TState : State
+    public static bool TryGetAtPath(this State rootState, StatePath path, out State state)
     {
       try
       {
-        state = rootState.GetAtPath<TState>(path);
+        state = rootState.GetAtPath(path);
         return state != null;
       }
-      catch (StatePathEvaluationException)
+      catch (StatePathException)
       {
         state = null;
         return false;
       }
     }
 
-    // Get all items with the specified path of the specified type
-    public static IEnumerable<TState> GetAllItemsAtPath<TState>(this State rootState, StatePath path) where TState : State
-    {
-      var state = rootState.GetAtPath<ListState>(path);
-      return state?.GetAll<TState>() ?? Enumerable.Empty<TState>();
-    }
-
-    // Get all fields with the specified path of the specified type
-    public static IEnumerable<KeyValuePair<string, TState>> GetAllFieldsAtPath<TState>(this State rootState, StatePath path) where TState : State
-    {
-      var state = rootState.GetAtPath<ObjectState>(path);
-      return state?.GetAll<TState>() ?? Enumerable.Empty<KeyValuePair<string, TState>>();
-    }
-
-    // Get all field keys with the specified path of the specified type
-    public static IEnumerable<string> GetAllKeysAtPath<TState>(this State rootState, StatePath path) where TState : State
-    {
-      var state = rootState.GetAtPath<ObjectState>(path);
-      return state?.GetAllKeys<TState>() ?? Enumerable.Empty<string>();
-    }
-
-    // Get all field values with the specified path of the specified type
-    public static IEnumerable<TState> GetAllValuesAtPath<TState>(this State rootState, StatePath path) where TState : State
-    {
-      var state = rootState.GetAtPath<ObjectState>(path);
-      return state?.GetAllValues<TState>() ?? Enumerable.Empty<TState>();
-    }
-
-    // Get items with the specified path of the specified type that match the specified predicate
-    public static IEnumerable<TState> GetAllItemsAtPathWhere<TState>(this State rootState, StatePath path, Func<TState, bool> predicate) where TState : State
-    {
-      var state = rootState.GetAtPath<ListState>(path);
-      return state?.GetAllWhere(predicate) ?? Enumerable.Empty<TState>();
-    }
-
-    // Get fields with the specified path of the specified type that match the specified predicate
-    public static IEnumerable<KeyValuePair<string, TState>> GetAllFieldsAtPathWhere<TState>(this State rootState, StatePath path, Func<TState, bool> predicate) where TState : State
-    {
-      var state = rootState.GetAtPath<ObjectState>(path);
-      return state?.GetAllWhere(predicate) ?? Enumerable.Empty<KeyValuePair<string, TState>>();
-    }
-
-    // Get field keys with the specified path of the specified type that match the specified predicate
-    public static IEnumerable<string> GetAllKeysAtPathWhere<TState>(this State rootState, StatePath path, Func<TState, bool> predicate) where TState : State
-    {
-      var state = rootState.GetAtPath<ObjectState>(path);
-      return state?.GetAllKeysWhere(predicate) ?? Enumerable.Empty<string>();
-    }
-
-    // Get field values with the specified path of the specified type that match the specified predicate
-    public static IEnumerable<TState> GetAllValuesAtPathWhere<TState>(this State rootState, StatePath path, Func<TState, bool> predicate) where TState : State
-    {
-      var state = rootState.GetAtPath<ObjectState>(path);
-      return state?.GetAllValuesWhere(predicate) ?? Enumerable.Empty<TState>();
-    }
-    #endregion
-
-    #region Setting a state from a path
     // Set a state with the specified path in the specified state
-    public static void SetAtPath(this State rootState, StatePath path, State state)
+    public static void SetAtPath(this State state, StatePath path, State value)
     {
-      path.EvaluateSetter(rootState, state);
+      path.EvaluateSetter(state, value);
     }
 
     // Return if a state with the specified path can be set in the specified state
-    public static bool TrySetAtPath(this State rootState, StatePath path, State state)
+    public static bool TrySetAtPath(this State state, StatePath path, State value)
     {
       try
       {
-         rootState.SetAtPath(path, state);
+         state.SetAtPath(path, value);
         return true;
       }
-      catch (StatePathEvaluationException)
+      catch (StatePathException)
       {
         return false;
       }
+    }
+    #endregion
+
+    #region List and object state extensions
+    // Get all items with the specified path of the specified type
+    public static IEnumerable<State> GetItemsAtPath(this State state, StatePath path)
+    {
+      return state.GetAtPath(path).IsList(out var listState) ? listState : Enumerable.Empty<State>();
+    }
+
+    // Get all fields with the specified path of the specified type
+    public static IEnumerable<KeyValuePair<string, State>> GetFieldsAtPath(this State state, StatePath path)
+    {
+      return state.GetAtPath(path).IsObject(out var objectState) ? objectState : Enumerable.Empty<KeyValuePair<string, State>>();
+    }
+
+    // Get all field keys with the specified path of the specified type
+    public static IEnumerable<string> GetKeysAtPath(this State state, StatePath path)
+    {
+      return state.GetAtPath(path).IsObject(out var objectState) ? objectState.keys : Enumerable.Empty<string>();
+    }
+
+    // Get all field values with the specified path of the specified type
+    public static IEnumerable<State> GetAllValuesAtPath(this State state, StatePath path)
+    {
+      return state.GetAtPath(path).IsObject(out var objectState) ? objectState.values : Enumerable.Empty<State>();
     }
     #endregion
   }

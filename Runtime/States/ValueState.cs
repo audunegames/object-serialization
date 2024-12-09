@@ -3,14 +3,14 @@ using System;
 namespace Audune.Pickle
 {
   // Class that defines a value state
-  public class ValueState : State, IEquatable<ValueState>
+  public class ValueState : State, IValueState, IEquatable<ValueState>
   {
     // The value of the value state
     private readonly object _value;
 
 
     // Return the value of the value state
-    internal object value => _value;
+    public object value => _value;
 
 
     // Constructor
@@ -22,17 +22,17 @@ namespace Audune.Pickle
 
     #region Returning states
     // Return the state as a value state
-    public override ValueState AsValue()
+    public override IValueState AsValue()
     {
       return this;
     }
     #endregion
 
-    #region Returning values
+    #region Value state implementation
     // Return if the value of the state is of the specified type and store the value
     public bool TryGet<TValue>(out TValue castValue)
     {
-      return _value.TryCast(out castValue).IsSuccesful();
+      return value.TryCast(out castValue).IsSuccesful();
     }
 
     // Return if the value of the state is of the specified type
@@ -45,7 +45,7 @@ namespace Audune.Pickle
     public TValue Get<TValue>()
     {
       if (!TryGet<TValue>(out var castValue))
-        throw new StateValueException(typeof(TValue), _value.GetType());
+        throw new StateValueException(typeof(TValue), value.GetType());
       
       return castValue;
     }

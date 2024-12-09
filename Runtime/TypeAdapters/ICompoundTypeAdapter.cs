@@ -26,14 +26,14 @@ namespace Audune.Pickle
     // Convert the specified value to a state
     State ITypeAdapter<T>.ToState(T value)
     {
-      return new CompoundState(extensionType, ToCompoundState(value));
+      return new CompoundExtensionState(extensionType, ToCompoundState(value));
     }
 
     // Convert the specified state to a value
     T ITypeAdapter<T>.FromState(State state)
     {
-      if (state is not CompoundState states)
-        throw new InvalidOperationException($"Expected state of type {typeof(CompoundState)}, but got {state.GetType()}");
+      if (state is not CompoundExtensionState states)
+        throw new InvalidOperationException($"Expected state of type {typeof(CompoundExtensionState)}, but got {state.GetType()}");
 
       if (states.type != extensionType)
         throw new InvalidOperationException($"Expected state with compound type {extensionType}, but got {states.type}");
@@ -44,8 +44,8 @@ namespace Audune.Pickle
     // Convert the specified state into an existing value
     void ITypeAdapter<T>.FromState(State state, ref T value)
     {
-      if (state is not CompoundState states)
-        throw new InvalidOperationException($"Expected state of type {typeof(CompoundState)}, but got {state.GetType()}");
+      if (state is not CompoundExtensionState states)
+        throw new InvalidOperationException($"Expected state of type {typeof(CompoundExtensionState)}, but got {state.GetType()}");
 
       if (states.type != extensionType)
         throw new InvalidOperationException($"Expected state with compound type {extensionType}, but got {states.type}");

@@ -5,27 +5,27 @@ namespace Audune.Pickle
   {
     #region Returning states
     // Return the state as a value state
-    public virtual ValueState AsValue()
+    public virtual IValueState AsValue()
     {
-      throw new StateTypeException(typeof(ValueState), GetType());
+      throw new StateTypeException(typeof(IValueState), GetType());
     }
 
     // Return the state as a list state
-    public virtual ListState AsList()
+    public virtual IListState AsList()
     {
-      throw new StateTypeException(typeof(ListState), GetType());
+      throw new StateTypeException(typeof(IListState), GetType());
     }
 
     // Return the state as an object state
-    public virtual ObjectState AsObject()
+    public virtual IObjectState AsObject()
     {
-      throw new StateTypeException(typeof(ObjectState), GetType());
+      throw new StateTypeException(typeof(IObjectState), GetType());
     }
     #endregion
 
     #region Checking for states
     // Return if the state is a value state with the specified type and store the state
-    public bool IsValue(out ValueState valueState)
+    public bool IsValue(out IValueState valueState)
     {
       try
       {
@@ -46,7 +46,7 @@ namespace Audune.Pickle
     }
 
     // Return if the state is a list state and store the state
-    public bool IsList(out ListState listState)
+    public bool IsList(out IListState listState)
     {
       try
       {
@@ -67,7 +67,7 @@ namespace Audune.Pickle
     }
 
     // Return if the state is an object state and store the state
-    public bool IsObject(out ObjectState objectState)
+    public bool IsObject(out IObjectState objectState)
     {
       try
       {

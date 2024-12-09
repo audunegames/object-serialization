@@ -47,20 +47,34 @@ namespace Audune.Pickle
       { typeof(bool), Bool },
 
       // Numeric value type adapters
-      { typeof(byte), UInt8 }, { typeof(sbyte), Int8 }, { typeof(ushort), UInt16 }, { typeof(short), Int16 },
-      { typeof(uint), UInt32 }, { typeof(int), Int32 }, { typeof(ulong), UInt64 }, { typeof(long), Int64 },
-      { typeof(float), Single }, { typeof(double), Double },
+      { typeof(byte), UInt8 },
+      { typeof(sbyte), Int8 },
+      { typeof(ushort), UInt16 },
+      { typeof(short), Int16 },
+      { typeof(uint), UInt32 },
+      { typeof(int), Int32 },
+      { typeof(ulong), UInt64 },
+      { typeof(long), Int64 },
+      { typeof(float), Single },
+      { typeof(double), Double },
 
       // Span value type adapters
       { typeof(string), String },
       { typeof(byte[]), Binary },
 
       // Compound value type adapters
-      { typeof(Vector2), Vector2 }, { typeof(Vector3), Vector3 }, { typeof(Vector4), Vector4 },
-      { typeof(Vector2Int), Vector2Int }, { typeof(Vector3Int), Vector3Int },
-      { typeof(Color32), Color32 }, { typeof(Color), Color },
+      { typeof(Vector2), Vector2 },
+      { typeof(Vector3), Vector3 },
+      { typeof(Vector4), Vector4 },
+      { typeof(Vector2Int), Vector2Int },
+      { typeof(Vector3Int), Vector3Int },
+      { typeof(Color32), Color32 },
+      { typeof(Color), Color },
       { typeof(Quaternion), Quaternion },
-      { typeof(Rect), Rect }, { typeof(RectInt), RectInt }, { typeof(Bounds), Bounds }, { typeof(BoundsInt), BoundsInt },
+      { typeof(Rect), Rect },
+      { typeof(RectInt), RectInt },
+      { typeof(Bounds), Bounds },
+      { typeof(BoundsInt), BoundsInt },
     };
   }
 }

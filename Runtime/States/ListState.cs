@@ -2,13 +2,11 @@ using MessagePack;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Audune.Pickle
 {
   // State that defines an list of state items
-  [MessagePackFormatter(typeof(MessagePackStateFormatter))]
-  public sealed class ListState : State, IEquatable<ListState>, IReadOnlyCollection<State>
+  public sealed class ListState : State, IListState, IEquatable<ListState>
   {
     // The items of the list
     private readonly List<State> _items;
@@ -25,104 +23,57 @@ namespace Audune.Pickle
 
     #region Returning states
     // Return the state as a list state
-    public override ListState AsList()
+    public override IListState AsList()
     {
       return this;
     }
     #endregion
 
-    #region Getting items
+    #region List state implementation
+    // Return the item count of the list state
+    public int count => _items.Count;
+
+    
     // Get an item with the specified index
-    public TState Get<TState>(int index, TState defaultState = null) where TState : State
+    public State Get(int index, State defaultValue)
     {
-      return index >= 0 && index < _items.Count ? _items[index] as TState ?? defaultState : defaultState;
+      return index >= 0 && index < _items.Count ? _items[index] : defaultValue;
     }
 
     // Return if an item with the specified index exists
-    public bool TryGet<TState>(int index, out TState state) where TState : State
+    public bool TryGet(int index, out State value)
     {
-      state = Get<TState>(index);
-      return state != null;
-    }
-
-    // Enumerate over all items of the specified type
-    public IEnumerable<TState> GetAll<TState>() where TState : State
-    {
-      return _items.Where(item => item is TState state).Select(item => item as TState);
-    }
-
-    // Enumerate over items of the specified type that match the specified predicate
-    public IEnumerable<TState> GetAllWhere<TState>(Func<TState, bool> predicate) where TState : State
-    {
-      return _items.Where(item => item is TState state && predicate(state)).Select(item => item as TState);
-    }
-
-    // Return if the list contains the specified item
-    public bool Contains(State item)
-    {
-      return _items.Contains(item);
-    }
-    #endregion
-
-    #region Setting items
-    // Set an item with the specified index
-    public void Set(int index, State state)
-    {
-      if (index >= 0 && index < _items.Count)
-        _items[index] = state;
-    }
-
-    // Set a new list with the specified index and return it
-    public ListState SetNewList(int index)
-    {
-      var state = new ListState();
-      Set(index, state);
-      return state;
-    }
-
-    // Set a new object with the specified index and return it
-    public ObjectState SetNewObject(int index)
-    {
-      var objectField = new ObjectState();
-      Set(index, objectField);
-      return objectField;
+      var inRange = index >= 0 && index < _items.Count;
+      value = inRange ? ((IListState)this).Get(index) : null;
+      return inRange;
     }
 
     // Add an item
-    public void Add(State state)
+    public void Add(State value)
     {
-      _items.Add(state);
+      _items.Add(value);
     }
 
-    // Add a new list and return it
-    public ListState AddNewList()
+    // Set an item with the specified index
+    public void Set(int index, State value)
     {
-      var state = new ListState();
-      Add(state);
-      return state;
+      if (index >= 0 && index < _items.Count)
+        _items[index] = value;
+      else
+        throw new ArgumentOutOfRangeException(nameof(index), index, $"Undefined index {index}");
     }
 
-    // Add a new object and return it
-    public ObjectState AddNewObject()
-    {
-      var objectField = new ObjectState();
-      Add(objectField);
-      return objectField;
-    }
-    #endregion
-
-    #region Removing items
     // Remove the item with the specified index
     public void Remove(int index)
     {
       _items.RemoveAt(index);
     }
-    #endregion
 
-    #region Collection implementation
-    // Return the number of items
-    public int Count => _items.Count;
-
+    // Return if the specified item exists
+    public bool Contains(State value)
+    {
+      return _items.Contains(value);
+    }
 
     // Return a generic enumerator over the values
     public IEnumerator<State> GetEnumerator()
@@ -133,7 +84,7 @@ namespace Audune.Pickle
     // Return an enumerator over the values
     IEnumerator IEnumerable.GetEnumerator()
     {
-      return GetEnumerator();
+      return _items.GetEnumerator();
     }
     #endregion
 
@@ -141,19 +92,32 @@ namespace Audune.Pickle
     // Return if the list equals another object
     public override bool Equals(object other)
     {
-      return other != null && Equals(other as ListState);
+      return Equals(other as ListState);
     }
 
     // Return if the list equals another list
     public bool Equals(ListState other)
     {
-      return EqualityComparer<List<State>>.Default.Equals(_items, other._items);
+      return other is not null && EqualityComparer<List<State>>.Default.Equals(_items, other._items);
     }
 
     // Return the hash code of the list
     public override int GetHashCode()
     {
       return HashCode.Combine(_items);
+    }
+
+
+    // Return if the state equals another state using the equal operator
+    public static bool operator ==(ListState left, ListState right)
+    {
+      return Equals(left, right);
+    }
+
+    // Return if the state does not equal another state using the not equal operator
+    public static bool operator !=(ListState left, ListState right)
+    {
+      return !(left == right);
     }
     #endregion
   }

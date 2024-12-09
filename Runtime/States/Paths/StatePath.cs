@@ -43,7 +43,7 @@ namespace Audune.Pickle
     // Parse a path using an implicit operator
     public static implicit operator StatePath(string input) 
     { 
-      return StatePath.Parse(input);
+      return Parse(input);
     }
 
 
@@ -70,10 +70,10 @@ namespace Audune.Pickle
       {
         var parentState = _parent?.EvaluateGetter(state) ?? state;
 
-        if (parentState is not ListState listState)
-          throw new StatePathEvaluationException($"Expected state of type {typeof(ListState)} but found {state.GetType()}");
-        else if (!listState.TryGet<State>(_index, out var itemState))
-          throw new StatePathEvaluationException($"Undefined item with index {_index}");
+        if (parentState is not IListState listState)
+          throw new StatePathException($"Expected state of type {typeof(ListState)} but found {state.GetType()}");
+        else if (!listState.TryGet(_index, out var itemState))
+          throw new StatePathException($"Undefined item with index {_index}");
         else
           return itemState;
       }
@@ -83,8 +83,8 @@ namespace Audune.Pickle
       {
         var parentState = _parent?.EvaluateGetter(state) ?? state;
 
-        if (parentState is not ListState listState)
-          throw new StatePathEvaluationException($"Expected state of type {typeof(ListState)} but found {state.GetType()}");
+        if (parentState is not IListState listState)
+          throw new StatePathException($"Expected state of type {typeof(ListState)} but found {state.GetType()}");
         else
           listState.Set(_index, value);
       }
@@ -114,10 +114,10 @@ namespace Audune.Pickle
       {
         var parentState = _parent?.EvaluateGetter(state) ?? state;
 
-        if (parentState is not ObjectState objectState)
-          throw new StatePathEvaluationException($"Expected state of type {typeof(ObjectState)} but found {state.GetType()}");
-        else if (!objectState.TryGet<State>(_name, out var fieldState))
-          throw new StatePathEvaluationException($"Undefined field with name {_name}");
+        if (parentState is not IObjectState objectState)
+          throw new StatePathException($"Expected state of type {typeof(ObjectState)} but found {state.GetType()}");
+        else if (!objectState.TryGet(_name, out var fieldState))
+          throw new StatePathException($"Undefined field with name {_name}");
         else 
           return fieldState;
       }
@@ -127,8 +127,8 @@ namespace Audune.Pickle
       {
         var parentState = _parent?.EvaluateGetter(state) ?? state;
 
-        if (parentState is not ObjectState objectState)
-          throw new StatePathEvaluationException($"Expected state of type {typeof(ObjectState)} but found {state.GetType()}");
+        if (parentState is not IObjectState objectState)
+          throw new StatePathException($"Expected state of type {typeof(ObjectState)} but found {state.GetType()}");
         else
           objectState.Set(_name, value);
       }
