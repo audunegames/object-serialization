@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines a type adapter for Quaternion objects
   internal class QuaternionTypeAdapter : ICompoundTypeAdapter<Quaternion>

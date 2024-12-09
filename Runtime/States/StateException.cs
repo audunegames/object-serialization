@@ -1,9 +1,9 @@
 using System;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines an exception thrown when getting or setting a state failed
-  public class StateException : PickleException
+  public class StateException : SerializerException
   {
     // Constructor
     public StateException(string message) : base(message) 

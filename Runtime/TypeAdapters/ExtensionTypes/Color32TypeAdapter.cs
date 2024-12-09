@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines a type adapter for Color32 objects
   internal class Color32TypeAdapter : IRawTypeAdapter<Color32>, IRawTypeAdapter<Color>

@@ -1,4 +1,4 @@
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Enum that defines the type of an encoder
   public enum EncoderType

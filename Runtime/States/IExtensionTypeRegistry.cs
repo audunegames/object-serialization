@@ -1,4 +1,4 @@
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Interface that defines a registry for extenstion types
   public interface IExtensionTypeRegistry

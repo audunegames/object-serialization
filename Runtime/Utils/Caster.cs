@@ -1,9 +1,9 @@
 using System;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines extension methods for objects to cast it to a different type
-  public static class Caster
+  internal static class Caster
   {
     // Enum that defines the result of a type cast
     public enum Result

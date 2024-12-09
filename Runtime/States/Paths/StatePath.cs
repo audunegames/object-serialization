@@ -1,6 +1,6 @@
 using System;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines a path in a state
   public abstract class StatePath

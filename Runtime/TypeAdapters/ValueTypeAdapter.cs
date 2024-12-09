@@ -1,4 +1,4 @@
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines a type adapter for value types
   public sealed class ValueTypeAdapter<T> : ITypeAdapter<T>

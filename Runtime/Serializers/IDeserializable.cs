@@ -1,4 +1,4 @@
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Interface that defines a class as deserializable
   public interface IDeserializable

@@ -1,7 +1,7 @@
 ﻿using MessagePack;
 using MessagePack.Formatters;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines a MessagePack formatter resolver for states
   internal class MessagePackStateFormatterResolver : IFormatterResolver

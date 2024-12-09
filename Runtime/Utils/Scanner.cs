@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines a scanner that iterates over a string
   internal sealed class Scanner

@@ -1,6 +1,6 @@
 using System;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Struct that defines a field with a name and type
   public readonly struct Field

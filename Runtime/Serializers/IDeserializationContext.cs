@@ -1,4 +1,4 @@
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Interface that defines the context for a deserializer
   public interface IDeserializationContext

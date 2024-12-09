@@ -2,9 +2,8 @@
 using MessagePack.Formatters;
 using System.Buffers;
 using System.Collections.Generic;
-using UnityEngine;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines a MessagePack formatter for states
   internal class MessagePackStateFormatter : IMessagePackFormatter<State>

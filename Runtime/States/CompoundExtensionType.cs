@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines an extension type that matches a compound extension state
   public class CompoundExtensionType : ExtensionType

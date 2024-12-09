@@ -1,4 +1,4 @@
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines extension methods for states
   public static class StateExtensions

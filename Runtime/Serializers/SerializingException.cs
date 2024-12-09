@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines an exception thrown when serializing an object fails
-  public class SerializingException : PickleException
+  public class SerializingException : SerializerException
   {
     // Constructor
     public SerializingException(string message) : base(message) { }

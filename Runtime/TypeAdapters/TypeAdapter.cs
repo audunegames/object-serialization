@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines predefined type adapters
   public static class TypeAdapter

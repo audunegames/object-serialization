@@ -1,4 +1,4 @@
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines a simple raw type adapter
   public sealed class SimpleRawTypeAdapter<T> : IRawTypeAdapter<T>

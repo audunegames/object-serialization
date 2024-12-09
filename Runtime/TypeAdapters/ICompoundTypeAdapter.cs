@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Interface that defines a type adapter for compound extension types
   public interface ICompoundTypeAdapter<T> : ITypeAdapter<T>

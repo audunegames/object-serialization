@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // State that defines an list of state items
   public sealed class ListState : State, IListState, IEquatable<ListState>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines an exception thrown when evaluating a path failed
   public class StatePathException : StateException

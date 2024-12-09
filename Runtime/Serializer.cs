@@ -4,17 +4,17 @@ using System.Linq;
 using MessagePack;
 using UnityEngine;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
-  // Class that defines the pickler for encoding and decoding states and objects
-  public sealed class Pickler : ISerializationContext, IDeserializationContext, IExtensionTypeRegistry
+  // Class that defines the serializer for encoding and decoding states and objects
+  public sealed class Serializer : ISerializationContext, IDeserializationContext, IExtensionTypeRegistry
   {
     // The encoder type of the pickler
     public readonly EncoderType encoderType;
 
 
     // The encoder for the pickler
-    private readonly Encoder _encoder;
+    private readonly IEncoder _encoder;
 
     // The compound types for the pickler
     private readonly Dictionary<sbyte, ExtensionType> _compoundTypes = new();
@@ -50,7 +50,7 @@ namespace Audune.Pickle
 
 
     // Constructor
-    public Pickler(EncoderType encoderType)
+    public Serializer(EncoderType encoderType)
     {
       this.encoderType = encoderType;
       
@@ -102,14 +102,14 @@ namespace Audune.Pickle
 
     #region Managing type adapters
     // Register a type adapter for the specified type
-    public Pickler RegisterTypeAdapter<T>(ITypeAdapter<T> typeAdapter)
+    public Serializer RegisterTypeAdapter<T>(ITypeAdapter<T> typeAdapter)
     {
       _typeAdapters.Add(typeof(T), typeAdapter);
       return this;
     }
 
     // Unregister a type adapter for the specified type
-    public Pickler UnregisterTypeAdapter<T>()
+    public Serializer UnregisterTypeAdapter<T>()
     {
       _typeAdapters.Remove(typeof(T));
       return this;

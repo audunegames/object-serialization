@@ -1,4 +1,4 @@
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines an extension type that matches a raw extension state
   public class RawExtensionType : ExtensionType

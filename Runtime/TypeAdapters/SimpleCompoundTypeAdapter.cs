@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines a simple compound type adapter
   public sealed class SimpleCompoundTypeAdapter<T> : ICompoundTypeAdapter<T>

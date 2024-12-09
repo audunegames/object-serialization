@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines a raw extension state
   public sealed class RawExtensionState : State, IValueState, IEquatable<RawExtensionState>

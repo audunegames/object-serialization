@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines a type adapter for Rect objects
   internal class RectTypeAdapter : ICompoundTypeAdapter<Rect>

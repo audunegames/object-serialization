@@ -1,6 +1,6 @@
 using System;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines a value state
   public class ValueState : State, IValueState, IEquatable<ValueState>

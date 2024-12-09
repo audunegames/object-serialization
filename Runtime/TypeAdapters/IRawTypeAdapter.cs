@@ -1,4 +1,4 @@
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Interface that defines a type adapter for raw extension types
   public interface IRawTypeAdapter<T> : ITypeAdapter<T>

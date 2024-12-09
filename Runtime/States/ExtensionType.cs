@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines an extension type
   public class ExtensionType

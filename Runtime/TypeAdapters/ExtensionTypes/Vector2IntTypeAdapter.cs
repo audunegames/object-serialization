@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines a type adapter for Vector2Int objects
   internal class Vector2IntTypeAdapter : ICompoundTypeAdapter<Vector2Int>

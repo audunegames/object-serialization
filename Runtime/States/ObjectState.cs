@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // State that defines an object containing key-state pairs
   [MessagePackFormatter(typeof(MessagePackStateFormatter))]

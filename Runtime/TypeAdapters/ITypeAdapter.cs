@@ -1,4 +1,4 @@
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Interface that defines a type adapter for serializing and deserializing states
   public interface ITypeAdapter<T>

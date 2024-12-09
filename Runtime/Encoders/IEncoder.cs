@@ -1,7 +1,7 @@
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
-  // Base class that defines an encoder that encodes and decodes states
-  public abstract class Encoder
+  // Interface that defines an encoder that encodes and decodes states
+  public interface IEncoder
   {
     // Encode a state to a byte array
     public abstract byte[] Encode(State state);

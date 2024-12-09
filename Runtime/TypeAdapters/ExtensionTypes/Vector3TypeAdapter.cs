@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines a type adapter for Vector3 objects
   internal class Vector3TypeAdapter : ICompoundTypeAdapter<Vector3>

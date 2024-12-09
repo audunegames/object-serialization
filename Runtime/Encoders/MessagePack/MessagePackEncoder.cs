@@ -1,9 +1,9 @@
 using MessagePack;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines a MessagePack encoder
-  public sealed class MessagePackEncoder : Encoder
+  public sealed class MessagePackEncoder : IEncoder
   {
     // The options of the encoder
     private MessagePackSerializerOptions _options;
@@ -18,8 +18,9 @@ namespace Audune.Pickle
     }
     
 
+    #region Encoder implementation
     // Encode a state to a byte array
-    public override byte[] Encode(State state)
+    public byte[] Encode(State state)
     {
       try
       {
@@ -32,7 +33,7 @@ namespace Audune.Pickle
     }
 
     // Decode a state from a byte array
-    public override State Decode(byte[] data)
+    public State Decode(byte[] data)
     {
       try
       {
@@ -43,5 +44,6 @@ namespace Audune.Pickle
         throw new DecodingException(ex.Message, ex);
       }
     }
+    #endregion
   }
 }

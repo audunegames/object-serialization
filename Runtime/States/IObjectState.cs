@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Interface that defines an object state
   public interface IObjectState : IEnumerable<KeyValuePair<string, State>>

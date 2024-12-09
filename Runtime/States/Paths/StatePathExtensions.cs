@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Audune.Pickle
+namespace Audune.Serialization
 {
   // Class that defines extensions for state paths
   public static class StatePathExtensions
