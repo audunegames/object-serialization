@@ -28,16 +28,16 @@ namespace Audune.Serialization
           SerializeValueState(ref writer, valueState);
           break;
 
-        case CompoundExtensionState compoundState:
-          SerializeCompoundState(ref writer, compoundState, options);
-          break;
-
         case ListState listState:
           SerializeListState(ref writer, listState, options);
           break;
 
         case ObjectState objectState:
           SerializeObjectState(ref writer, objectState, options);
+          break;
+
+        case CompoundExtensionState compoundState:
+          SerializeCompoundState(ref writer, compoundState, options);
           break;
 
         case RawExtensionState rawState:
@@ -84,18 +84,6 @@ namespace Audune.Serialization
         throw new MessagePackSerializationException($"Unsupported value state value {state.value.GetType()}");
     }
 
-    // Serialize a compound state
-    private void SerializeCompoundState(ref MessagePackWriter writer, CompoundExtensionState state, MessagePackSerializerOptions options)
-    {
-      var extensionBuffer = new ArrayBufferWriter<byte>();
-      var extensionWriter = writer.Clone(extensionBuffer);
-      foreach (var childState in state.states)
-        Serialize(ref extensionWriter, childState, options);
-      extensionWriter.Flush();
-
-      writer.WriteExtensionFormat(new ExtensionResult(state.type.code, new ReadOnlySequence<byte>(extensionBuffer.WrittenMemory)));
-    }
-
     // Serialize a list state
     private void SerializeListState(ref MessagePackWriter writer, ListState state, MessagePackSerializerOptions options)
     {
@@ -115,6 +103,18 @@ namespace Audune.Serialization
         writer.Write(field.Key);
         Serialize(ref writer, field.Value, options);
       }
+    }
+
+    // Serialize a compound state
+    private void SerializeCompoundState(ref MessagePackWriter writer, CompoundExtensionState state, MessagePackSerializerOptions options)
+    {
+      var extensionBuffer = new ArrayBufferWriter<byte>();
+      var extensionWriter = writer.Clone(extensionBuffer);
+      foreach (var childState in state.states)
+        Serialize(ref extensionWriter, childState, options);
+      extensionWriter.Flush();
+
+      writer.WriteExtensionFormat(new ExtensionResult(state.type.code, new ReadOnlySequence<byte>(extensionBuffer.WrittenMemory)));
     }
 
     // Serialize a raw state
@@ -227,15 +227,7 @@ namespace Audune.Serialization
 
       try
       {
-        if (type is RawExtensionType rawType)
-        {
-          if (rawType.length != header.Length)
-            throw new StateException($"Expected extension length of {rawType.length}, but got {header.Length}");
-
-          var bytes = reader.ReadRaw(header.Length).ToArray();
-          return new RawExtensionState(rawType, bytes);
-        }
-        else if (type is CompoundExtensionType compoundType)
+        if (type is CompoundExtensionType compoundType)
         {
           var states = new List<ValueState>();
           for (var i = 0; i < compoundType.fields.Length; i ++)
@@ -246,6 +238,14 @@ namespace Audune.Serialization
             states.Add(valueState);
           }
           return new CompoundExtensionState(compoundType, states);
+        }
+        else if (type is RawExtensionType rawType)
+        {
+          if (rawType.length != header.Length)
+            throw new StateException($"Expected extension length of {rawType.length}, but got {header.Length}");
+
+          var bytes = reader.ReadRaw(header.Length).ToArray();
+          return new RawExtensionState(rawType, bytes);
         }
         else
         {

@@ -49,7 +49,7 @@ namespace Audune.Serialization
     // Get a field with the specified name and state type
     public TState Get<TState>(string name, TState defaultValue = null) where TState : State
     {
-      var state = Get(name, defaultValue);
+      var state = Get(name, (State)defaultValue);
       if (state is not TState tState)
         throw new StateTypeException(typeof(TState), state.GetType());
 
