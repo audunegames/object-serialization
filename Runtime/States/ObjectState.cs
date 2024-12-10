@@ -1,4 +1,3 @@
-using MessagePack;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +5,6 @@ using System.Collections.Generic;
 namespace Audune.Serialization
 {
   // State that defines an object containing key-state pairs
-  [MessagePackFormatter(typeof(MessagePackStateFormatter))]
   public sealed class ObjectState : State, IObjectState, IEquatable<ObjectState>
   {
     // The dictionary of key-value pairs
@@ -48,12 +46,37 @@ namespace Audune.Serialization
       return _fields.TryGetValue(name, out var state) ? state : defaultValue;
     }
 
+    // Get a field with the specified name and state type
+    public TState Get<TState>(string name, TState defaultValue = null) where TState : State
+    {
+      var state = Get(name, defaultValue);
+      if (state is not TState tState)
+        throw new StateTypeException(typeof(TState), state.GetType());
+
+      return tState;
+    }
+
     // Return if a field with the specified name exists and store the item
     public bool TryGet(string name, out State value)
     {
       var inRange = _fields.ContainsKey(name);
       value = inRange ? _fields[name] : null;
       return inRange;
+    }
+
+    // Return if a field with the specified name and state type exists and store the field value
+    public bool TryGet<TState>(string name, out TState value) where TState : State
+    {
+      if (TryGet(name, out var state) && state is TState tState)
+      {
+        value = tState;
+        return true;
+      }
+      else
+      {
+        value = default;
+        return false;
+      }
     }
 
     // Set a field with the specified name

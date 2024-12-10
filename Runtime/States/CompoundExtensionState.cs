@@ -46,11 +46,6 @@ namespace Audune.Serialization
       return HashCode.Combine(type, states);
     }
 
-    public IEnumerator GetEnumerator()
-    {
-      throw new NotImplementedException();
-    }
-
 
     // Return if the state equals another state using the equal operator
     public static bool operator ==(CompoundExtensionState left, CompoundExtensionState right)

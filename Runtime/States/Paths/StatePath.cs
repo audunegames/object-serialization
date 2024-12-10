@@ -71,7 +71,7 @@ namespace Audune.Serialization
         var parentState = _parent?.EvaluateGetter(state) ?? state;
 
         if (parentState is not IListState listState)
-          throw new StatePathException($"Expected state of type {typeof(ListState)} but found {state.GetType()}");
+          throw new StatePathException($"Expected state of type {typeof(IListState)} but found {state.GetType()}");
         else if (!listState.TryGet(_index, out var itemState))
           throw new StatePathException($"Undefined item with index {_index}");
         else
@@ -84,7 +84,7 @@ namespace Audune.Serialization
         var parentState = _parent?.EvaluateGetter(state) ?? state;
 
         if (parentState is not IListState listState)
-          throw new StatePathException($"Expected state of type {typeof(ListState)} but found {state.GetType()}");
+          throw new StatePathException($"Expected state of type {typeof(IListState)} but found {state.GetType()}");
         else
           listState.Set(_index, value);
       }
@@ -115,7 +115,7 @@ namespace Audune.Serialization
         var parentState = _parent?.EvaluateGetter(state) ?? state;
 
         if (parentState is not IObjectState objectState)
-          throw new StatePathException($"Expected state of type {typeof(ObjectState)} but found {state.GetType()}");
+          throw new StatePathException($"Expected state of type {typeof(IObjectState)} but found {state.GetType()}");
         else if (!objectState.TryGet(_name, out var fieldState))
           throw new StatePathException($"Undefined field with name {_name}");
         else 
@@ -128,7 +128,7 @@ namespace Audune.Serialization
         var parentState = _parent?.EvaluateGetter(state) ?? state;
 
         if (parentState is not IObjectState objectState)
-          throw new StatePathException($"Expected state of type {typeof(ObjectState)} but found {state.GetType()}");
+          throw new StatePathException($"Expected state of type {typeof(IObjectState)} but found {state.GetType()}");
         else
           objectState.Set(_name, value);
       }

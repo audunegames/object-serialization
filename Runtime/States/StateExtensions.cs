@@ -21,7 +21,7 @@ namespace Audune.Serialization
     }
 
     // Set a new list state with the specified index in the list state and return the state
-    public static IListState SetNewList(this IListState state, int index)
+    public static ListState SetNewList(this IListState state, int index)
     {
       var listState = new ListState();
       state.Set(index, listState);
@@ -29,7 +29,7 @@ namespace Audune.Serialization
     }
 
     // Set a new object statewith the specified index in the list stateand return the state
-    public static IObjectState SetNewObject(this IListState state, int index)
+    public static ObjectState SetNewObject(this IListState state, int index)
     {
       var objectState = new ObjectState();
       state.Set(index, objectState);
@@ -39,7 +39,7 @@ namespace Audune.Serialization
 
     #region Extensions for object states
     // Set a new list state with the specified name in the object state and return the state
-    public static IListState SetNewList(this IObjectState state, string name)
+    public static ListState SetNewList(this IObjectState state, string name)
     {
       var listState = new ListState();
       state.Set(name, listState);
@@ -47,7 +47,7 @@ namespace Audune.Serialization
     }
 
     // Set a new object state with the specified name in the object state and return the state
-    public static IObjectState SetNewObject(this IObjectState state, string name)
+    public static ObjectState SetNewObject(this IObjectState state, string name)
     {
       var objectState = new ObjectState();
       state.Set(name, objectState);

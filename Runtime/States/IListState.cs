@@ -15,9 +15,15 @@ namespace Audune.Serialization
 
     // Get an item with the specified index
     public State Get(int index, State defaultValue = null);
+    
+    // Get an item with the specified index and state type
+    public TState Get<TState>(int index, TState defaultValue = null) where TState : State;
 
     // Return if an item with the specified index exists and store the item
     public bool TryGet(int index, out State state);
+
+    // Return if an item with the specified index and state type exists and store the field value
+    public bool TryGet<TState>(int index, out TState value) where TState : State;
 
     // Add an item
     public void Add(State state);

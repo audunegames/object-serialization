@@ -22,8 +22,14 @@ namespace Audune.Serialization
     // Get a field with the specified name
     public State Get(string name, State defaultValue = null);
 
+    // Get a field with the specified name and state type
+    public TState Get<TState>(string name, TState defaultValue = null) where TState : State;
+
     // Return if a field with the specified name exists and store the field value
     public bool TryGet(string name, out State value);
+
+    // Return if a field with the specified name and state type exists and store the field value
+    public bool TryGet<TState>(string name, out TState value) where TState : State;
 
     // Set a field with the specified name
     public void Set(string name, State value);

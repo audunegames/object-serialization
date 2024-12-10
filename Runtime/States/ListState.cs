@@ -1,4 +1,3 @@
-using MessagePack;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,6 +20,7 @@ namespace Audune.Serialization
         _items = new List<State>();
     }
 
+
     #region Returning states
     // Return the state as a list state
     public override IListState AsList()
@@ -39,6 +39,16 @@ namespace Audune.Serialization
     {
       return index >= 0 && index < _items.Count ? _items[index] : defaultValue;
     }
+    
+    // Get an item with the specified index and state type
+    public TState Get<TState>(int index, TState defaultValue = null) where TState : State
+    {
+      var state = Get(index, defaultValue);
+      if (state is not TState tState)
+        throw new StateTypeException(typeof(TState), state.GetType());
+
+      return tState;
+    }
 
     // Return if an item with the specified index exists
     public bool TryGet(int index, out State value)
@@ -46,6 +56,21 @@ namespace Audune.Serialization
       var inRange = index >= 0 && index < _items.Count;
       value = inRange ? _items[index] : null;
       return inRange;
+    }
+
+    // Return if an item with the specified index and state type exists and store the field value
+    public bool TryGet<TState>(int index, out TState value) where TState : State
+    {
+      if (TryGet(index, out var state) && state is TState tState)
+      {
+        value = tState;
+        return true;
+      }
+      else
+      {
+        value = default;
+        return false;
+      }
     }
 
     // Add an item
