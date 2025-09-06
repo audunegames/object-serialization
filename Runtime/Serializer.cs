@@ -9,17 +9,17 @@ namespace Audune.Serialization
   // Class that defines the serializer for encoding and decoding states and objects
   public sealed class Serializer : ISerializationContext, IDeserializationContext, IExtensionTypeRegistry
   {
-    // The encoder type of the pickler
+    // The encoder type of the serializer
     public readonly EncoderType encoderType;
 
 
-    // The encoder for the pickler
+    // The encoder for the serializer
     private readonly IEncoder _encoder;
 
-    // The compound types for the pickler
+    // The compound types for the serializer
     private readonly Dictionary<sbyte, ExtensionType> _compoundTypes = new();
 
-    // The type adapters for the pickler
+    // The type adapters for the serializer
     private readonly Dictionary<Type, object> _typeAdapters = new() {
       { typeof(bool), TypeAdapter.Bool },
       { typeof(byte), TypeAdapter.UInt8 },
