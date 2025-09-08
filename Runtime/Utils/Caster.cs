@@ -8,6 +8,7 @@ namespace Audune.Serialization
     // Enum that defines the result of a type cast
     public enum Result
     {
+      Null,
       SameTypeCast,
       AssignableTypeCast,
       ConvertableTypeCast,
@@ -33,13 +34,17 @@ namespace Audune.Serialization
     // Return if the result of a type cast was succesful
     public static bool IsSuccesful(this Result result)
     {
-      return result == Result.SameTypeCast || result == Result.AssignableTypeCast || result == Result.ConvertableTypeCast;
+      return result == Result.Null || result == Result.SameTypeCast || result == Result.AssignableTypeCast || result == Result.ConvertableTypeCast;
     }
     
 
     // Return how the specified value can be cast to the expected type and the cast value
     private static (Result result, object castValue) TryCastInternal(object value, Type expectedType)
     {
+      // Check if the value is null
+      if (value == null && expectedType.IsClass)
+        return (Result.Null, value);
+
       // Check if the type of the value is equal to the expected type
       if (expectedType == value.GetType())
         return (Result.SameTypeCast, value);

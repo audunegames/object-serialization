@@ -52,9 +52,9 @@ namespace Audune.Serialization
     // Serialize a value state
     private void SerializeValueState(ref MessagePackWriter writer, ValueState state)
     {
-      if (state.value is null)
+      if (state == null || state.value is null)
         writer.WriteNil();
-      if (state.value is bool boolValue)
+      else if (state.value is bool boolValue)
         writer.Write(boolValue);
       else if (state.value is byte byteValue)
         writer.Write(byteValue);
