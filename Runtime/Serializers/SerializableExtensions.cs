@@ -6,12 +6,14 @@ namespace Audune.Serialization
   // Class that defines extension methods for serialization
   public static class SerializableExtensions
   {
-    #region Serializing and deserializing dictionaries of objects
+    #region Serializing and deserializing enumerables
     // Serialize all elements in an enumerable to an object state
-    public static ObjectState Serialize<TSerializable>(this IEnumerable<TSerializable> enumerable, Func<TSerializable, string> keySelector, ISerializationContext context) where TSerializable : ISerializable
+    public static ObjectState SerializeWithKey<T>(this ISerializationContext context, IEnumerable<T> enumerable, Func<T, string> keySelector)
     {
+      if (context == null)
+        throw new ArgumentNullException(nameof(context));
       if (enumerable == null)
-        throw new ArgumentNullException(nameof(enumerable));
+          throw new ArgumentNullException(nameof(enumerable));
       if (keySelector == null)
         throw new ArgumentNullException(nameof(keySelector));
 
@@ -19,21 +21,23 @@ namespace Audune.Serialization
       foreach (var e in enumerable)
       {
         var key = keySelector(e);
-        state.Set(key, e.Serialize(context));
+        state.Set(key, context.Serialize(e));
       }
 
       return state;
     }
 
     // Serialize all objects in an enumerable to an object state
-    public static ObjectState Serialize<TSerializable>(this IEnumerable<TSerializable> enumerable, ISerializationContext context) where TSerializable : UnityEngine.Object, ISerializable
+    public static ObjectState SerializeWithKey<T>(this ISerializationContext context, IEnumerable<T> enumerable) where T : UnityEngine.Object
     {
-      return Serialize(enumerable, e => e.name, context);
+      return SerializeWithKey(context, enumerable, e => e.name);
     }
 
     // Deserialize all elements in an enumerable from an object state
-    public static void Deserialize<TDeserializable>(this IEnumerable<TDeserializable> enumerable, Func<TDeserializable, string> keySelector, ObjectState state, IDeserializationContext context) where TDeserializable : IDeserializable
+    public static void DeserializeWithKey<T>(this IDeserializationContext context, IEnumerable<T> enumerable, Func<T, string> keySelector, ObjectState state)
     {
+      if (context == null)
+        throw new ArgumentNullException(nameof(context));
       if (enumerable == null)
         throw new ArgumentNullException(nameof(enumerable));
       if (keySelector == null)
@@ -43,14 +47,14 @@ namespace Audune.Serialization
       {
         var key = keySelector(e);
         if (state.TryGet(key, out var childState))
-          e.Deserialize(childState, context);
+          context.Deserialize(childState, e);
       }
     }
 
     // Deserialize all objects in an enumerable from an object state
-    public static void Deserialize<TDeserializable>(this IEnumerable<TDeserializable> enumerable, ObjectState state, IDeserializationContext context) where TDeserializable : UnityEngine.Object, IDeserializable
+    public static void DeserializeWithKey<T>(this IDeserializationContext context, IEnumerable<T> enumerable, ObjectState state) where T : UnityEngine.Object
     {
-      Deserialize(enumerable, e => e.name, state, context);
+      DeserializeWithKey(context, enumerable, e => e.name, state);
     }
     #endregion
   }
