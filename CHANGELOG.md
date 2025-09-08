@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.4] - 2025-09-08
+
+### Added
+
+- Added support for serializing null value states.
+
+### Changed
+
+- Modified serializable extension methods to be extensions on `ISerializationContext` and `IDeserializationContext`, and made the methods generic to be able to work with any enumerable.
+
 ## [1.0.3] - 2025-09-06
 
 ### Changed
