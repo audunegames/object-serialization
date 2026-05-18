@@ -1,7 +1,7 @@
 {
   "name": "com.audune.serialization",
   "displayName": "Object Serialization",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "unity": "2022.3",
   "description": "Custom and extensible object serialization for Unity 2022 LTS or higher.",
   "documentationUrl": "https://github.com/audunegames/object-serialization",
@@ -9,7 +9,7 @@
   "licensesUrl": "https://www.gnu.org/licenses/lgpl-3.0.html",
   "license": "LGPL-3.0-or-later",
   "author": {
-    "name": "Audune Games",
+    "name": "Audune",
     "email": "support@audune.com",
     "url": "https://audune.com/"
   },
