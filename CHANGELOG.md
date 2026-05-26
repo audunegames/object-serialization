@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.6] - 2026-05-26
 
+### Changed
+
+- Made deserialization extension methods more generic by using `ICollection<T>` as parameter.
+
+## [1.0.6] - 2026-05-26
+
 ### Added
 
 - Added implicit operators to convert states to compound values using type adapters and vice versa.
