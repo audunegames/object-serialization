@@ -7,7 +7,7 @@ namespace Audune.Serialization
   internal class QuaternionTypeAdapter : ICompoundTypeAdapter<Quaternion>
   {
     // The extension type of the type adapter
-    public CompoundExtensionType extensionType=> ExtensionType.Quaternion;
+    public CompoundExtensionType extensionType => ExtensionType.Quaternion;
     
 
     // Convert the specified value to a compound state

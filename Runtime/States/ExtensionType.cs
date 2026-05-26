@@ -41,6 +41,7 @@ namespace Audune.Serialization
 
     // Static values for predefined raw extension types
     public static readonly RawExtensionType Color32 = new(0x06, 4);
+    public static readonly RawExtensionType Guid = new(0x10, 16);
 
     // Static values for predefined lists of extension types
     public static readonly IReadOnlyList<ExtensionType> StandardExtensionTypes = new ExtensionType[] {
@@ -58,6 +59,7 @@ namespace Audune.Serialization
 
       // Raw extension types
       Color32,
+      Guid,
     };
     #endregion
   }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Audune.Serialization
@@ -123,6 +124,7 @@ namespace Audune.Serialization
     public static implicit operator State(RectInt value) => TypeAdapter.RectInt.ToState(value);
     public static implicit operator State(Bounds value) => TypeAdapter.Bounds.ToState(value);
     public static implicit operator State(BoundsInt value) => TypeAdapter.BoundsInt.ToState(value);
+    public static implicit operator State(Guid value) => TypeAdapter.Guid.ToState(value);
 
 
     // Operators that convert from states to bool values
@@ -157,6 +159,7 @@ namespace Audune.Serialization
     public static implicit operator RectInt(State state) => TypeAdapter.RectInt.FromState(state);
     public static implicit operator Bounds(State state) => TypeAdapter.Bounds.FromState(state);
     public static implicit operator BoundsInt(State state) => TypeAdapter.BoundsInt.FromState(state);
+    public static implicit operator Guid(State state) => TypeAdapter.Guid.FromState(state);
     #endregion
   }
 }

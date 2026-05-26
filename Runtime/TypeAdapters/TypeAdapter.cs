@@ -39,6 +39,7 @@ namespace Audune.Serialization
     public static readonly ITypeAdapter<RectInt> RectInt = new RectIntTypeAdapter();
     public static readonly ITypeAdapter<Bounds> Bounds = new BoundsTypeAdapter();
     public static readonly ITypeAdapter<BoundsInt> BoundsInt = new BoundsIntTypeAdapter();
+    public static readonly ITypeAdapter<Guid> Guid = new GuidTypeAdapter();
 
     // Static values for predefined dictionaries of compound types
     public static readonly Dictionary<Type, object> StandardTypeAdapters = new Dictionary<Type, object>()
@@ -75,6 +76,7 @@ namespace Audune.Serialization
       { typeof(RectInt), RectInt },
       { typeof(Bounds), Bounds },
       { typeof(BoundsInt), BoundsInt },
+      { typeof(Guid), Guid },
     };
   }
 }
