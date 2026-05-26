@@ -21,6 +21,12 @@ namespace Audune.Serialization
 
 
     #region Returning states
+    // Return if the state is null
+    public override bool IsNull()
+    {
+      return value == null;
+    }
+    
     // Return the state as a value state
     public override IValueState AsValue()
     {

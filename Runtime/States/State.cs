@@ -7,6 +7,12 @@ namespace Audune.Serialization
   public abstract class State
   {
     #region Returning states
+    // Return if the state is null
+    public virtual bool IsNull()
+    {
+      return false;
+    }
+    
     // Return the state as a value state
     public virtual IValueState AsValue()
     {

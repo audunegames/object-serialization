@@ -5,8 +5,14 @@ namespace Audune.Serialization
   {
     // Return the value of the value state
     public object value { get; }
-
-
+    
+    
+    // Return if the state is null
+    public bool IsNull()
+    {
+      return value == null;
+    }
+    
     // Return if the value of the state is of the specified type and store the value
     public bool TryGet<TValue>(out TValue castValue)
     {
