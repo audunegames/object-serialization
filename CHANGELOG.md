@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.6] - 2026-05-26
+
+### Added
+
+- Added implicit operators to convert states to compound values using type adapters and vice versa.
+- Added extension methods to convert from enumerables to list and object states and vice versa.
+
+### Deprecated
+
+- Made `SerializeWithKey` and `DeserializeWithKey` extension methods obsolete in favor of `SerializeToObject` and `ApplyDeserializationFromObject`.
+
+### Fixed
+
+- Fixed recursive call in `ListState.Get<T>`.
+- Fixed recursive call in `RawExtensionState.Equals` due to wrong type name.
+
 ## [1.0.5] - 2026-05-18
 
 ### Security
