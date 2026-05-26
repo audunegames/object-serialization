@@ -43,7 +43,7 @@ namespace Audune.Serialization
     // Get a field with the specified name
     public State Get(string name, State defaultValue = null)
     {
-      return _fields.TryGetValue(name, out var state) ? state : defaultValue;
+      return _fields.GetValueOrDefault(name, defaultValue);
     }
 
     // Get a field with the specified name and state type
@@ -74,7 +74,7 @@ namespace Audune.Serialization
       }
       else
       {
-        value = default;
+        value = null;
         return false;
       }
     }

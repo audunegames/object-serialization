@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace Audune.Serialization
@@ -12,11 +11,11 @@ namespace Audune.Serialization
 
 
     // The extension type of the type adapter
-    private CompoundExtensionType _extensionType;
+    private readonly CompoundExtensionType _extensionType;
 
     // The serializer and deserializer of the type adapter
-    private Serializer _serializer;
-    private Deserializer _deserializer;
+    private readonly Serializer _serializer;
+    private readonly Deserializer _deserializer;
 
 
     // Return the extension type of the type adapter

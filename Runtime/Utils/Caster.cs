@@ -43,7 +43,7 @@ namespace Audune.Serialization
     {
       // Check if the value is null
       if (value == null && expectedType.IsClass)
-        return (Result.Null, value);
+        return (Result.Null, null);
 
       // Check if the type of the value is equal to the expected type
       if (expectedType == value.GetType())

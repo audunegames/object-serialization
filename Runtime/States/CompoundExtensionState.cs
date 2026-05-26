@@ -19,7 +19,7 @@ namespace Audune.Serialization
     internal CompoundExtensionState(CompoundExtensionType type, IReadOnlyList<ValueState> states)
     {
       this.type = type;
-      this.states = states is ValueState[] statesArray ? statesArray : states.ToArray();
+      this.states = states as ValueState[] ?? states.ToArray();
 
       type.AssertFields(this.states);
     }
@@ -37,7 +37,7 @@ namespace Audune.Serialization
     {
       return other is not null
         && EqualityComparer<ExtensionType>.Default.Equals(type, other.type)
-        && EqualityComparer<State[]>.Default.Equals(states, other.states);
+        && EqualityComparer<ValueState[]>.Default.Equals(states, other.states);
     }
 
     // Return the hash code of the boolean

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Audune.Serialization
 {
-  // State that defines an list of state items
+  // State that defines a list of state items
   public sealed class ListState : State, IListState, IEquatable<ListState>
   {
     // The items of the list
@@ -43,7 +43,7 @@ namespace Audune.Serialization
     // Get an item with the specified index and state type
     public TState Get<TState>(int index, TState defaultValue = null) where TState : State
     {
-      var state = Get(index, defaultValue);
+      var state = Get(index, (State)defaultValue);
       if (state is not TState tState)
         throw new StateTypeException(typeof(TState), state.GetType());
 
@@ -68,7 +68,7 @@ namespace Audune.Serialization
       }
       else
       {
-        value = default;
+        value = null;
         return false;
       }
     }

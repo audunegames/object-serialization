@@ -54,7 +54,7 @@ namespace Audune.Serialization
     // Check if the next character is one of the specified characters
     public bool Check(params char[] chars)
     {
-      return Check(c =>chars.Contains(c));
+      return Check(chars.Contains);
     }
 
     // Check if the next character sequence matches the specified string
@@ -78,7 +78,7 @@ namespace Audune.Serialization
     // Check if the next character is one of the specified characters and advance if so
     public bool Match(params char[] chars)
     {
-      return Match(c => chars.Contains(c));
+      return Match(chars.Contains);
     }
 
     // Check if the next character sequence matches the specified string and advance if so
@@ -105,7 +105,7 @@ namespace Audune.Serialization
     // Consume the next character if it is one of the specified characters or throw an error if the consuming was unsuccesful
     public char Consume(params char[] chars)
     {
-      return Consume(c => chars.Contains(c), chars.Length > 1 ? $"one of {string.Join(", ", chars.Select(c => $"'{c}'"))}" : $"'{chars[0]}'");
+      return Consume(chars.Contains, chars.Length > 1 ? $"one of {string.Join(", ", chars.Select(c => $"'{c}'"))}" : $"'{chars[0]}'");
     }
 
     // Consume the next character sequence if it matches the specified string or throw an error if the consuming was unsuccesful
@@ -130,7 +130,7 @@ namespace Audune.Serialization
     // Consume the next character while it is one of the specified characters and return the consumed characters
     public string ReadWhile(params char[] chars)
     {
-      return ReadWhile(c => chars.Contains(c));
+      return ReadWhile(chars.Contains);
     }
 
     // Consume the next character while it matches the predicate with a special case for the first character and return the consumed characters
@@ -161,10 +161,10 @@ namespace Audune.Serialization
     // Consume the next character while it is one of the specified characters without saving the consumed characters
     public void SkipWhile(params char[] chars)
     {
-      SkipWhile(c => chars.Contains(c));
+      SkipWhile(chars.Contains);
     }
 
-    // Asser tthat the scanner has reached the end of the input string
+    // Assert that the scanner has reached the end of the input string
     public void AssertAtEnd()
     {
       if (!AtEnd)

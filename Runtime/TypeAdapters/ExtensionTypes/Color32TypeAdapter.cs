@@ -12,7 +12,7 @@ namespace Audune.Serialization
     // Convert the specified value to a byte array
     public byte[] ToBytes(Color32 value)
     {
-      var bytes = new byte[] { value.r, value.g, value.b, value.a };
+      var bytes = new[] { value.r, value.g, value.b, value.a };
       return bytes;
     }
 
@@ -26,13 +26,13 @@ namespace Audune.Serialization
     // Convert the specified color value to a byte array
     byte[] IRawTypeAdapter<Color>.ToBytes(Color value)
     {
-      return ToBytes((Color32)value);
+      return ToBytes(value);
     }
 
     // Convert the specified byte array to a color value
     Color IRawTypeAdapter<Color>.FromBytes(byte[] bytes)
     {
-      return (Color)FromBytes(bytes);
+      return FromBytes(bytes);
     }
   }
 }

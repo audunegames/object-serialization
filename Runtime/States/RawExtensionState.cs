@@ -10,7 +10,7 @@ namespace Audune.Serialization
     internal readonly RawExtensionType type;
 
     // The bytes of the raw extension state
-    internal byte[] bytes;
+    internal readonly byte[] bytes;
 
 
     // Return the value of the raw extension state
@@ -29,7 +29,7 @@ namespace Audune.Serialization
     // Return if the state equals another object
     public override bool Equals(object other)
     {
-      return Equals(other as ValueState);
+      return Equals(other as RawExtensionState);
     }
 
     // Return if the state equals another state

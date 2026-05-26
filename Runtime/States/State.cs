@@ -34,7 +34,7 @@ namespace Audune.Serialization
       }
       catch (StateException)
       {
-        valueState = default;
+        valueState = null;
         return false;
       }
     }
@@ -55,7 +55,7 @@ namespace Audune.Serialization
       }
       catch (StateException)
       {
-        listState = default;
+        listState = null;
         return false;
       }
     }
@@ -76,7 +76,7 @@ namespace Audune.Serialization
       }
       catch (StateException)
       {
-        objectState = default;
+        objectState = null;
         return false;
       }
     }

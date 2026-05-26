@@ -5,7 +5,7 @@ namespace Audune.Serialization
   // Class that defines a path in a state
   public abstract class StatePath
   {
-    // Evaluate the path as a getteron the specified state
+    // Evaluate the path as a getter on the specified state
     internal abstract State EvaluateGetter(State state);
 
     // Evaluate the path as a setter on the specified state

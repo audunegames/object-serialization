@@ -24,7 +24,7 @@ namespace Audune.Serialization
         throw new StateException($"Expected {fields.Length} states, but got {states.Length}");
       
       // Iterate over the states
-      for (int i = 0; i < states.Length; i ++)
+      for (var i = 0; i < states.Length; i ++)
       {
         // Check if the types match
         if (!states[i].value.TryCast(fields[i].type).IsSuccesful())

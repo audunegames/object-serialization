@@ -134,7 +134,9 @@ namespace Audune.Serialization
       if (!TryGetTypeAdapter(typeof(T), out var typeAdapterObject))
         throw new SerializingException($"Unsupported object type {typeof(T)}");
 
-      var typeAdapter = typeAdapterObject as ITypeAdapter<T>;
+      if (typeAdapterObject is not ITypeAdapter<T> typeAdapter)
+        throw new SerializingException($"Type adapter type mismatch for type {typeof(T)}");
+      
       return typeAdapter.ToState(value);
     }
     #endregion
@@ -160,7 +162,9 @@ namespace Audune.Serialization
       if (!TryGetTypeAdapter(typeof(T), out var typeAdapterObject))
         throw new DeserializingException($"Unsupported object type {typeof(T)}");
 
-      var typeAdapter = typeAdapterObject as ITypeAdapter<T>;
+      if (typeAdapterObject is not ITypeAdapter<T> typeAdapter)
+        throw new DeserializingException($"Type adapter type mismatch for type {typeof(T)}");
+      
       return typeAdapter.FromState(state);
     }
 
@@ -175,8 +179,10 @@ namespace Audune.Serialization
         
       if (!TryGetTypeAdapter(typeof(T), out var typeAdapterObject))
         throw new DeserializingException($"Unsupported object type {typeof(T)}");
-
-      var typeAdapter = typeAdapterObject as ITypeAdapter<T>;
+      
+      if (typeAdapterObject is not ITypeAdapter<T> typeAdapter)
+        throw new DeserializingException($"Type adapter type mismatch for type {typeof(T)}");
+      
       typeAdapter.FromState(state, value);
     }
     #endregion
@@ -214,7 +220,7 @@ namespace Audune.Serialization
     public void Decode<T>(byte[] data, T value)
     {
       var state = DecodeState(data);
-      Deserialize<T>(state, value);
+      Deserialize(state, value);
     }
     #endregion
   }

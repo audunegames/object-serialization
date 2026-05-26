@@ -9,11 +9,11 @@ namespace Audune.Serialization
 
 
     // The extension type of the type adapter
-    private RawExtensionType _extensionType;
+    private readonly RawExtensionType _extensionType;
 
     // The serializer and deserializer of the type adapter
-    private Serializer _serializer;
-    private Deserializer _deserializer;
+    private readonly Serializer _serializer;
+    private readonly Deserializer _deserializer;
 
 
     // Return the extension type of the type adapter
