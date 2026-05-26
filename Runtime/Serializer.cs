@@ -20,33 +20,7 @@ namespace Audune.Serialization
     private readonly Dictionary<sbyte, ExtensionType> _compoundTypes = new();
 
     // The type adapters for the serializer
-    private readonly Dictionary<Type, object> _typeAdapters = new() {
-      { typeof(bool), TypeAdapter.Bool },
-      { typeof(byte), TypeAdapter.UInt8 },
-      { typeof(sbyte), TypeAdapter.Int8 },
-      { typeof(ushort), TypeAdapter.UInt16 },
-      { typeof(short), TypeAdapter.Int16 },
-      { typeof(uint), TypeAdapter.UInt32 },
-      { typeof(int), TypeAdapter.Int32 },
-      { typeof(ulong), TypeAdapter.UInt64 },
-      { typeof(long), TypeAdapter.Int64 },
-      { typeof(float), TypeAdapter.Single },
-      { typeof(double), TypeAdapter.Double },
-      { typeof(string), TypeAdapter.String },
-      { typeof(byte[]), TypeAdapter.Binary },
-      { typeof(Vector2), TypeAdapter.Vector2 },
-      { typeof(Vector3), TypeAdapter.Vector3 },
-      { typeof(Vector4), TypeAdapter.Vector4 },
-      { typeof(Vector2Int), TypeAdapter.Vector2Int },
-      { typeof(Vector3Int), TypeAdapter.Vector3Int },
-      { typeof(Color32), TypeAdapter.Color32 },
-      { typeof(Color), TypeAdapter.Color },
-      { typeof(Quaternion), TypeAdapter.Quaternion },
-      { typeof(Rect), TypeAdapter.Rect },
-      { typeof(RectInt), TypeAdapter.RectInt },
-      { typeof(Bounds), TypeAdapter.Bounds },
-      { typeof(BoundsInt), TypeAdapter.BoundsInt },
-    };
+    private readonly Dictionary<Type, object> _typeAdapters = new(TypeAdapter.StandardTypeAdapters);
 
 
     // Constructor

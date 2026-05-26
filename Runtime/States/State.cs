@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Audune.Serialization
 {
   // Class that defines an abstract state
@@ -107,6 +109,20 @@ namespace Audune.Serialization
     // Operators that convert from span values to states
     public static implicit operator State(string value) => new ValueState(value);
     public static implicit operator State(byte[] value) => new ValueState(value);
+    
+    // Operators that convert from compound values to states
+    public static implicit operator State(Vector2 value) => TypeAdapter.Vector2.ToState(value);
+    public static implicit operator State(Vector3 value) => TypeAdapter.Vector3.ToState(value);
+    public static implicit operator State(Vector4 value) => TypeAdapter.Vector4.ToState(value);
+    public static implicit operator State(Vector2Int value) => TypeAdapter.Vector2Int.ToState(value);
+    public static implicit operator State(Vector3Int value) => TypeAdapter.Vector3Int.ToState(value);
+    public static implicit operator State(Color32 value) => TypeAdapter.Color32.ToState(value);
+    public static implicit operator State(Color value) => TypeAdapter.Color.ToState(value);
+    public static implicit operator State(Quaternion value) => TypeAdapter.Quaternion.ToState(value);
+    public static implicit operator State(Rect value) => TypeAdapter.Rect.ToState(value);
+    public static implicit operator State(RectInt value) => TypeAdapter.RectInt.ToState(value);
+    public static implicit operator State(Bounds value) => TypeAdapter.Bounds.ToState(value);
+    public static implicit operator State(BoundsInt value) => TypeAdapter.BoundsInt.ToState(value);
 
 
     // Operators that convert from states to bool values
@@ -127,6 +143,20 @@ namespace Audune.Serialization
     // Operators that convert from states to span values
     public static implicit operator string(State state) => state.AsValue().Get<string>();
     public static implicit operator byte[](State state) => state.AsValue().Get<byte[]>();
+    
+    // Operators that convert from states to compound values
+    public static implicit operator Vector2(State state) => TypeAdapter.Vector2.FromState(state);
+    public static implicit operator Vector3(State state) => TypeAdapter.Vector3.FromState(state);
+    public static implicit operator Vector4(State state) => TypeAdapter.Vector4.FromState(state);
+    public static implicit operator Vector2Int(State state) => TypeAdapter.Vector2Int.FromState(state);
+    public static implicit operator Vector3Int(State state) => TypeAdapter.Vector3Int.FromState(state);
+    public static implicit operator Color32(State state) => TypeAdapter.Color32.FromState(state);
+    public static implicit operator Color(State state) => TypeAdapter.Color.FromState(state);
+    public static implicit operator Quaternion(State state) => TypeAdapter.Quaternion.FromState(state);
+    public static implicit operator Rect(State state) => TypeAdapter.Rect.FromState(state);
+    public static implicit operator RectInt(State state) => TypeAdapter.RectInt.FromState(state);
+    public static implicit operator Bounds(State state) => TypeAdapter.Bounds.FromState(state);
+    public static implicit operator BoundsInt(State state) => TypeAdapter.BoundsInt.FromState(state);
     #endregion
   }
 }
