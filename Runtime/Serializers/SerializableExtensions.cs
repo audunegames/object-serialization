@@ -38,22 +38,22 @@ namespace Audune.Serialization
     }
 
     
-    // Deserialize all items in a list state and add them into the specified list
-    public static void AddDeserializationFromList<T>(this IDeserializationContext context, IListState state, List<T> list)
+    // Deserialize all items in a list state and add them into the specified collection
+    public static void AddDeserializationFromList<T>(this IDeserializationContext context, IListState state, ICollection<T> collection)
     {
       if (context == null)
         throw new ArgumentNullException(nameof(context));
       if (state == null)
         throw new ArgumentNullException(nameof(state));
-      if (list == null)
-        throw new ArgumentNullException(nameof(list));
+      if (collection == null)
+        throw new ArgumentNullException(nameof(collection));
       
       foreach (var e in DeserializeFromList<T>(context, state))
-        list.Add(e);
+        collection.Add(e);
     }
     
     // Deserialize all items in a list state and add them into the specified dictionary with the specified key selector
-    public static void AddDeserializationFromList<T, TKey>(this IDeserializationContext context, IListState state, Dictionary<TKey, T> dictionary, Func<T, TKey> keySelector)
+    public static void AddDeserializationFromList<T, TKey>(this IDeserializationContext context, IListState state, IDictionary<TKey, T> dictionary, Func<T, TKey> keySelector)
     {
       if (context == null)
         throw new ArgumentNullException(nameof(context));
@@ -119,22 +119,22 @@ namespace Audune.Serialization
     }
     
     
-    // Deserialize all items in an object state and add them into the specified dictionary
-    public static void AddDeserializationFromObject<T>(this IDeserializationContext context, IObjectState state, Dictionary<string, T> dictionary)
+    // Deserialize all items in an object state and add them into the specified collection
+    public static void AddDeserializationFromObject<T>(this IDeserializationContext context, IObjectState state, ICollection<KeyValuePair<string, T>> collection)
     {
       if (context == null)
         throw new ArgumentNullException(nameof(context));
       if (state == null)
         throw new ArgumentNullException(nameof(state));
-      if (dictionary == null)
-        throw new ArgumentNullException(nameof(dictionary));
+      if (collection == null)
+        throw new ArgumentNullException(nameof(collection));
       
       foreach (var e in DeserializeFromObject<T>(context, state))
-        dictionary.Add(e.Key, e.Value);
+        collection.Add(e);
     }
     
     // Deserialize all items in an object state and add them into the specified dictionary with the specified key selector
-    public static void AddDeserializationFromObject<T, TKey>(this IDeserializationContext context, IObjectState state, Dictionary<TKey, T> dictionary, Func<string, TKey> keySelector)
+    public static void AddDeserializationFromObject<T, TKey>(this IDeserializationContext context, IObjectState state, IDictionary<TKey, T> dictionary, Func<string, TKey> keySelector)
     {
       if (context == null)
         throw new ArgumentNullException(nameof(context));
