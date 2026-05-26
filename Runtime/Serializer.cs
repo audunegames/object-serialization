@@ -123,7 +123,7 @@ namespace Audune.Serialization
       {
         try
         {
-          var value = (T)Activator.CreateInstance(typeof(T));
+          var value = (T)Activator.CreateInstance(typeof(T), true);
           ((IDeserializable)value).Deserialize(state, this);
           return value;
         }
