@@ -1,4 +1,5 @@
-﻿using MessagePack;
+﻿using System;
+using MessagePack;
 using MessagePack.Formatters;
 using System.Buffers;
 using System.Collections.Generic;
@@ -80,6 +81,8 @@ namespace Audune.Serialization
         writer.Write(stringValue);
       else if (state.value is byte[] byteArrayValue)
         writer.Write(byteArrayValue);
+      else if (state.value is DateTime timestampValue)
+        writer.Write(timestampValue);
       else
         throw new MessagePackSerializationException($"Unsupported value state value {state.value.GetType()}");
     }
@@ -187,7 +190,7 @@ namespace Audune.Serialization
     private State DeserializeBinaryFormat(ref MessagePackReader reader)
     {
       var byteSpan = reader.ReadBytes();
-      return new ValueState(byteSpan.HasValue ? byteSpan.Value.ToArray() : new byte[0]);
+      return new ValueState(byteSpan.HasValue ? byteSpan.Value.ToArray() : Array.Empty<byte>());
     }
 
     // Deserialize an array format
@@ -195,7 +198,7 @@ namespace Audune.Serialization
     {
       var length = reader.ReadArrayHeader();
       var listState = new ListState();
-      for (int i = 0; i < length; i++)
+      for (var i = 0; i < length; i++)
       {
         var state = Deserialize(ref reader, options);
         listState.Add(state);
@@ -208,7 +211,7 @@ namespace Audune.Serialization
     {
       var length = reader.ReadMapHeader();
       var objectState = new ObjectState();
-      for (int i = 0; i < length; i++)
+      for (var i = 0; i < length; i++)
       {
         var name = reader.ReadString();
         var state = Deserialize(ref reader, options);
@@ -227,16 +230,25 @@ namespace Audune.Serialization
 
       try
       {
-        if (type is CompoundExtensionType compoundType)
+        if (type is TimestampExtensionType)
+        {
+          if (!(header.Length == 4 ||  header.Length == 8 ||   header.Length == 12))
+            throw new StateException($"Expected extension length of 4, 8, or 12, but got {header.Length}");
+          
+          var timestamp = reader.ReadDateTime(header).ToLocalTime();
+          return new ValueState(timestamp);
+        }
+        else if (type is CompoundExtensionType compoundType)
         {
           var states = new List<ValueState>();
-          for (var i = 0; i < compoundType.fields.Length; i ++)
+          for (var i = 0; i < compoundType.fields.Length; i++)
           {
             var state = Deserialize(ref reader, options);
             if (state is not ValueState valueState)
               throw new StateTypeException(typeof(ValueState), state.GetType());
             states.Add(valueState);
           }
+
           return new CompoundExtensionState(compoundType, states);
         }
         else if (type is RawExtensionType rawType)

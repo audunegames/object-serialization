@@ -117,6 +117,9 @@ namespace Audune.Serialization
     public static implicit operator State(string value) => new ValueState(value);
     public static implicit operator State(byte[] value) => new ValueState(value);
     
+    // Operators that convert from struct values to states
+    public static implicit operator State(DateTime value) => new ValueState(value);
+    
     // Operators that convert from compound values to states
     public static implicit operator State(Vector2 value) => TypeAdapter.Vector2.ToState(value);
     public static implicit operator State(Vector3 value) => TypeAdapter.Vector3.ToState(value);
@@ -151,6 +154,9 @@ namespace Audune.Serialization
     // Operators that convert from states to span values
     public static implicit operator string(State state) => state.AsValue().Get<string>();
     public static implicit operator byte[](State state) => state.AsValue().Get<byte[]>();
+    
+    // Operators that convert from struct values to states
+    public static implicit operator DateTime(State state) => state.AsValue().Get<DateTime>();
     
     // Operators that convert from states to compound values
     public static implicit operator Vector2(State state) => TypeAdapter.Vector2.FromState(state);

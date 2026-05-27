@@ -17,6 +17,9 @@ namespace Audune.Serialization
 
 
     #region Predefined extension types
+    // Static values for predefined well-known extension types
+    public static readonly TimestampExtensionType Timestamp = new();
+    
     // Static values for predefined compound extension types
     public static readonly CompoundExtensionType Vector2 = new(0x01,
       Field.Float("x"), Field.Float("y"));
@@ -45,6 +48,9 @@ namespace Audune.Serialization
 
     // Static values for predefined lists of extension types
     public static readonly IReadOnlyList<ExtensionType> StandardExtensionTypes = new ExtensionType[] {
+      // Well-known extension types
+      Timestamp,
+      
       // Compound extension types
       Vector2,
       Vector3,

@@ -25,6 +25,9 @@ namespace Audune.Serialization
     // Static values for predefined span value type adapters
     public static readonly ITypeAdapter<string> String = new ValueTypeAdapter<string>();
     public static readonly ITypeAdapter<byte[]> Binary = new ValueTypeAdapter<byte[]>();
+    
+    // Static values for predefined struct value type adapters
+    public static readonly ITypeAdapter<DateTime> Timestamp = new ValueTypeAdapter<DateTime>();
 
     // Static values for predefined compound value type adapters
     public static readonly ITypeAdapter<Vector2> Vector2 = new Vector2TypeAdapter();
@@ -62,6 +65,9 @@ namespace Audune.Serialization
       // Span value type adapters
       { typeof(string), String },
       { typeof(byte[]), Binary },
+      
+      // Struct value type adapters
+      { typeof(DateTime), Timestamp },
 
       // Compound value type adapters
       { typeof(Vector2), Vector2 },

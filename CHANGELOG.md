@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added support for serializing `System.DateTime` through the timestamp extension type.
 - Added support for serializing `System.Guid` with a raw exension state.
 - Added `IsNull` method to the state class to check if its value is null.
 
