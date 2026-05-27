@@ -6,7 +6,7 @@ namespace Audune.Serialization
   public sealed class MessagePackEncoder : IEncoder
   {
     // The options of the encoder
-    private MessagePackSerializerOptions _options;
+    private readonly MessagePackSerializerOptions _options;
 
 
     // Constructor

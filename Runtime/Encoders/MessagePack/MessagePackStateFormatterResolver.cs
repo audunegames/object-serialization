@@ -6,18 +6,13 @@ namespace Audune.Serialization
   // Class that defines a MessagePack formatter resolver for states
   internal class MessagePackStateFormatterResolver : IFormatterResolver
   {
-    // The compound type registry for the resolver
-    private readonly IExtensionTypeRegistry _extensionTypeRegistry;
-
     // The formatters for the resolver
     private readonly IMessagePackFormatter<State> _stateFormatter;
 
     // Constructor
     public MessagePackStateFormatterResolver(IExtensionTypeRegistry extensionTypeRegistry)
     {
-      _extensionTypeRegistry = extensionTypeRegistry;
-
-      _stateFormatter = new MessagePackStateFormatter(_extensionTypeRegistry);
+      _stateFormatter = new MessagePackStateFormatter(extensionTypeRegistry);
     }
 
 

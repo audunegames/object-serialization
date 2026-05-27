@@ -4,9 +4,9 @@ namespace Audune.Serialization
   public interface IEncoder
   {
     // Encode a state to a byte array
-    public abstract byte[] Encode(State state);
+    public byte[] Encode(State state);
 
     // Decode a state from a byte array
-    public abstract State Decode(byte[] data);
+    public State Decode(byte[] data);
   }
 }
