@@ -4,11 +4,26 @@ using System.Collections.Generic;
 
 namespace Audune.Serialization
 {
-  // State that defines a list of state items
+  /// <summary>
+  /// Class that defines a state that contains a list of <see cref="State"/>s.
+  /// </summary>
   public sealed class ListState : State, IListState, IEquatable<ListState>
   {
-    // The items of the list
+    /// <summary>
+    /// The list of items of the state.
+    /// </summary>
     private readonly List<State> _items;
+    
+    
+    /// <inheritdoc/>
+    public int count => _items.Count;
+    
+    
+    /// <inheritdoc/>
+    int IReadOnlyCollection<State>.Count => count;
+    
+    /// <inheritdoc/>
+    State IReadOnlyList<State>.this[int index] => ((IListState)this)[index];
 
 
     // Constructor
@@ -21,8 +36,8 @@ namespace Audune.Serialization
     }
 
 
-    #region Returning states
-    // Return the state as a list state
+    #region Returning and converting states
+    /// <inheritdoc/>
     public override IListState AsList()
     {
       return this;
@@ -30,17 +45,13 @@ namespace Audune.Serialization
     #endregion
 
     #region List state implementation
-    // Return the item count of the list state
-    public int count => _items.Count;
-
-    
-    // Get an item with the specified index
+    /// <inheritdoc/>
     public State Get(int index, State defaultValue = null)
     {
       return index >= 0 && index < _items.Count ? _items[index] : defaultValue;
     }
     
-    // Get an item with the specified index and state type
+    /// <inheritdoc/>
     public TState Get<TState>(int index, TState defaultValue = null) where TState : State
     {
       var state = Get(index, (State)defaultValue);
@@ -50,7 +61,7 @@ namespace Audune.Serialization
       return tState;
     }
 
-    // Return if an item with the specified index exists
+    /// <inheritdoc/>
     public bool TryGet(int index, out State value)
     {
       var inRange = index >= 0 && index < _items.Count;
@@ -58,7 +69,7 @@ namespace Audune.Serialization
       return inRange;
     }
 
-    // Return if an item with the specified index and state type exists and store the field value
+    /// <inheritdoc/>
     public bool TryGet<TState>(int index, out TState value) where TState : State
     {
       if (TryGet(index, out var state) && state is TState tState)
@@ -73,13 +84,13 @@ namespace Audune.Serialization
       }
     }
 
-    // Add an item
+    /// <inheritdoc/>
     public void Add(State value)
     {
       _items.Add(value);
     }
 
-    // Set an item with the specified index
+    /// <inheritdoc/>
     public void Set(int index, State value)
     {
       if (index >= 0 && index < _items.Count)
@@ -88,25 +99,27 @@ namespace Audune.Serialization
         throw new ArgumentOutOfRangeException(nameof(index), index, $"Undefined index {index}");
     }
 
-    // Remove the item with the specified index
+    /// <inheritdoc/>
     public void Remove(int index)
     {
       _items.RemoveAt(index);
     }
 
-    // Return if the specified item exists
+    /// <inheritdoc/>
     public bool Contains(State value)
     {
       return _items.Contains(value);
     }
-
-    // Return a generic enumerator over the values
+    #endregion
+    
+    #region Read-only list implementation
+    /// <inheritdoc/>
     public IEnumerator<State> GetEnumerator()
     {
       return _items.GetEnumerator();
     }
 
-    // Return an enumerator over the values
+    /// <inheritdoc/>
     IEnumerator IEnumerable.GetEnumerator()
     {
       return _items.GetEnumerator();
@@ -114,32 +127,42 @@ namespace Audune.Serialization
     #endregion
 
     #region Equatable implementation
-    // Return if the list equals another object
+    /// <inheritdoc/>
     public override bool Equals(object other)
     {
       return Equals(other as ListState);
     }
 
-    // Return if the list equals another list
+    /// <inheritdoc/>
     public bool Equals(ListState other)
     {
       return other is not null && EqualityComparer<List<State>>.Default.Equals(_items, other._items);
     }
 
-    // Return the hash code of the list
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
       return HashCode.Combine(_items);
     }
 
 
-    // Return if the state equals another state using the equal operator
+    /// <summary>
+    /// Return if the specified <see cref="ListState"/>s are equal to each other.
+    /// </summary>
+    /// <param name="left">The left <see cref="ListState"/> to compare.</param>
+    /// <param name="right">The right <see cref="ListState"/> to compare.</param>
+    /// <returns>If the specified <see cref="ListState"/>s are equal.</returns>
     public static bool operator ==(ListState left, ListState right)
     {
       return Equals(left, right);
     }
 
-    // Return if the state does not equal another state using the not equal operator
+    /// <summary>
+    /// Return if the specified <see cref="ListState"/>s are not equal to each other.
+    /// </summary>
+    /// <param name="left">The left <see cref="ListState"/> to compare.</param>
+    /// <param name="right">The right <see cref="ListState"/> to compare.</param>
+    /// <returns>If the specified <see cref="ListState"/>s are equal.</returns>
     public static bool operator !=(ListState left, ListState right)
     {
       return !(left == right);

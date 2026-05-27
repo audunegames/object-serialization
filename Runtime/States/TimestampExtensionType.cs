@@ -2,10 +2,14 @@ using MessagePack;
 
 namespace Audune.Serialization
 {
-  // Class that defines a timestamp extension type
+  /// <summary>
+  /// Class that defines an extension type for timestamps.
+  /// </summary>
   public sealed class TimestampExtensionType : ExtensionType
   {
-    // Constructor
+    /// <summary>
+    /// Constructor.
+    /// </summary>
     public TimestampExtensionType() : base(ReservedMessagePackExtensionTypeCode.DateTime)
     {
     }

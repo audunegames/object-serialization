@@ -1,21 +1,30 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Audune.Serialization
 {
-  // Class that defines a compound extension state
+  /// <summary>
+  /// Class that defines an extension state that contains an array of value states.
+  /// </summary> 
   public class CompoundExtensionState : State, IEquatable<CompoundExtensionState>
   {
-    // The type of the compound state
+    /// <summary>
+    /// The type of the state.
+    /// </summary>
     internal readonly CompoundExtensionType type;
 
-    // The states of the compound state
+    /// <summary>
+    /// The array of value states of the state.
+    /// </summary>
     internal readonly ValueState[] states;
 
 
-    // Constructor
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="type">The type of the state.</param>
+    /// <param name="states">The array of value states of the state.</param>
     internal CompoundExtensionState(CompoundExtensionType type, IReadOnlyList<ValueState> states)
     {
       this.type = type;
@@ -26,13 +35,13 @@ namespace Audune.Serialization
 
 
     #region Equatable implementation
-    // Return if the state equals another object
+    /// <inheritdoc/>
     public override bool Equals(object other)
     {
       return Equals(other as CompoundExtensionState);
     }
 
-    // Return if the state equals another state
+    /// <inheritdoc/>
     public bool Equals(CompoundExtensionState other)
     {
       return other is not null
@@ -40,20 +49,30 @@ namespace Audune.Serialization
         && EqualityComparer<ValueState[]>.Default.Equals(states, other.states);
     }
 
-    // Return the hash code of the boolean
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
       return HashCode.Combine(type, states);
     }
 
 
-    // Return if the state equals another state using the equal operator
+    /// <summary>
+    /// Return if the specified <see cref="CompoundExtensionState"/>s are equal to each other.
+    /// </summary>
+    /// <param name="left">The left <see cref="CompoundExtensionState"/> to compare.</param>
+    /// <param name="right">The right <see cref="CompoundExtensionState"/> to compare.</param>
+    /// <returns>If the specified <see cref="CompoundExtensionState"/>s are equal.</returns>
     public static bool operator ==(CompoundExtensionState left, CompoundExtensionState right)
     {
       return Equals(left, right);
     }
 
-    // Return if the state does not equal another state using the not equal operator
+    /// <summary>
+    /// Return if the specified <see cref="CompoundExtensionState"/>s are not equal to each other.
+    /// </summary>
+    /// <param name="left">The left <see cref="CompoundExtensionState"/> to compare.</param>
+    /// <param name="right">The right <see cref="CompoundExtensionState"/> to compare.</param>
+    /// <returns>If the specified <see cref="CompoundExtensionState"/>s are equal.</returns>
     public static bool operator !=(CompoundExtensionState left, CompoundExtensionState right)
     {
       return !(left == right);

@@ -12,12 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added support for serializing `System.DateTime` through the timestamp extension type.
 - Added support for serializing `System.Guid` with a raw exension state.
 - Added `IsNull` method to the state class to check if its value is null.
+- Implemented `IReadOnlyList<State>` for `IListState` and `IReadOnlyDictionary<string, State>` for `IObjectState`.
 
-## Changed
+### Changed
 
 - Allow private parameterless constructors when deserializing states in the serializer.
 
-## [1.0.6] - 2026-05-26
+## [1.0.7] - 2026-05-26
 
 ### Changed
 

@@ -3,21 +3,31 @@ using System.Collections.Generic;
 
 namespace Audune.Serialization
 {
-  // Class that defines a raw extension state
+  /// <summary>
+  /// Class that defines a extension state that contains a byte array value.
+  /// </summary>
   public sealed class RawExtensionState : State, IValueState, IEquatable<RawExtensionState>
   {
-    // The type of the raw extension state
+    /// <summary>
+    /// The type of the state.
+    /// </summary>
     internal readonly RawExtensionType type;
 
-    // The bytes of the raw extension state
+    /// <summary>
+    /// The byte array value of the state.
+    /// </summary>
     internal readonly byte[] bytes;
 
 
-    // Return the value of the raw extension state
+    /// <inheritdoc/>
     object IValueState.value => bytes;
 
 
-    // Constructor
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="type">The type of the state.</param>
+    /// <param name="bytes">The byte array value of the state.</param>
     internal RawExtensionState(RawExtensionType type, byte[] bytes)
     {
       this.type = type;
@@ -26,13 +36,13 @@ namespace Audune.Serialization
     
 
     #region Equatable implementation
-    // Return if the state equals another object
+    /// <inheritdoc/>
     public override bool Equals(object other)
     {
       return Equals(other as RawExtensionState);
     }
 
-    // Return if the state equals another state
+    /// <inheritdoc/>
     public bool Equals(RawExtensionState other)
     {
       return other is not null
@@ -40,20 +50,30 @@ namespace Audune.Serialization
         && Equals(bytes, other.bytes);
     }
 
-    // Return the hash code of the state
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
       return HashCode.Combine(type, bytes);
     }
 
 
-    // Return if the state equals another state using the equal operator
+    /// <summary>
+    /// Return if the specified <see cref="RawExtensionState"/>s are equal to each other.
+    /// </summary>
+    /// <param name="left">The left <see cref="RawExtensionState"/> to compare.</param>
+    /// <param name="right">The right <see cref="RawExtensionState"/> to compare.</param>
+    /// <returns>If the specified <see cref="RawExtensionState"/>s are equal.</returns>
     public static bool operator ==(RawExtensionState left, RawExtensionState right)
     {
       return Equals(left, right);
     }
     
-    // Return if the state does not equal another state using the not equal operator
+    /// <summary>
+    /// Return if the specified <see cref="RawExtensionState"/>s are not equal to each other.
+    /// </summary>
+    /// <param name="left">The left <see cref="RawExtensionState"/> to compare.</param>
+    /// <param name="right">The right <see cref="RawExtensionState"/> to compare.</param>
+    /// <returns>If the specified <see cref="RawExtensionState"/>s are equal.</returns>
     public static bool operator !=(RawExtensionState left, RawExtensionState right)
     {
       return !(left == right);
@@ -61,7 +81,11 @@ namespace Audune.Serialization
     #endregion
 
     #region Implicit operators
-    // Operators that convert from states to span values
+    /// <summary>
+    /// Convert a <see cref="RawExtensionState"/> to a <see cref="System.Byte"/>[] value.
+    /// </summary>
+    /// <param name="state">The state to convert.</param>
+    /// <returns>The converted value.</returns>
     public static implicit operator byte[](RawExtensionState state) => state.bytes;
     #endregion
   }

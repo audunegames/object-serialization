@@ -2,11 +2,18 @@ using System;
 
 namespace Audune.Serialization
 {
-  // Class that defines extension methods for states
+  /// <summary>
+  /// Class that defines extension methods for states.
+  /// </summary>
   public static class StateExtensions
   {
     #region Extensions for list states
-    // Add a new list state to the list state and return the state
+    /// <summary>
+    /// Create a new <see cref="ListState"/> and add it to the specified list state.
+    /// </summary>
+    /// <param name="state">The list state to add the new <see cref="ListState"/> to.</param>
+    /// <returns>The newly created <see cref="ListState"/>.</returns>
+    /// <exception cref="ArgumentNullException">If <paramref name="state"/> is <see langword="null"/>.</exception>
     public static ListState AddNewList(this IListState state)
     {
       if (state == null)
@@ -17,7 +24,12 @@ namespace Audune.Serialization
       return listState;
     }
 
-    // Add a new object state to the list state and return the state
+    /// <summary>
+    /// Create a new <see cref="ObjectState"/> and add it to the specified list state.
+    /// </summary>
+    /// <param name="state">The list state to add the new <see cref="ObjectState"/> to.</param>
+    /// <returns>The newly created <see cref="ObjectState"/>.</returns>
+    /// <exception cref="ArgumentNullException">If <paramref name="state"/> is <see langword="null"/>.</exception>
     public static ObjectState AddNewObject(this IListState state)
     {
       if (state == null)
@@ -27,8 +39,14 @@ namespace Audune.Serialization
       state.Add(objectState);
       return objectState;
     }
-
-    // Set a new list state with the specified index in the list state and return the state
+    
+    /// <summary>
+    /// Create a new <see cref="ListState"/> and set it with the specified index in the specified list state.
+    /// </summary>
+    /// <param name="state">The list state to set the new <see cref="ListState"/> in.</param>
+    /// <param name="index">The index to set.</param>
+    /// <returns>The newly created <see cref="ListState"/>.</returns>
+    /// <exception cref="ArgumentNullException">If <paramref name="state"/> is <see langword="null"/>.</exception>
     public static ListState SetNewList(this IListState state, int index)
     {
       if (state == null)
@@ -39,7 +57,13 @@ namespace Audune.Serialization
       return listState;
     }
 
-    // Set a new object state with the specified index in the list state and return the state
+    /// <summary>
+    /// Create a new <see cref="ObjectState"/> and set it with the specified index in the specified list state.
+    /// </summary>
+    /// <param name="state">The list state to set the new <see cref="ObjectState"/> in.</param>
+    /// <param name="index">The index to set.</param>
+    /// <returns>The newly created <see cref="ObjectState"/>.</returns>
+    /// <exception cref="ArgumentNullException">If <paramref name="state"/> is <see langword="null"/>.</exception>
     public static ObjectState SetNewObject(this IListState state, int index)
     {
       if (state == null)
@@ -52,7 +76,13 @@ namespace Audune.Serialization
     #endregion
 
     #region Extensions for object states
-    // Set a new list state with the specified name in the object state and return the state
+    /// <summary>
+    /// Create a new <see cref="ListState"/> and set it with the specified field name in the specified object state.
+    /// </summary>
+    /// <param name="state">The object state to set the new <see cref="ListState"/> in.</param>
+    /// <param name="name">The field name to set.</param>
+    /// <returns>The newly created <see cref="ListState"/>.</returns>
+    /// <exception cref="ArgumentNullException">If <paramref name="state"/> is <see langword="null"/>.</exception>
     public static ListState SetNewList(this IObjectState state, string name)
     {
       if (state == null)
@@ -63,7 +93,13 @@ namespace Audune.Serialization
       return listState;
     }
 
-    // Set a new object state with the specified name in the object state and return the state
+    /// <summary>
+    /// Create a new <see cref="ObjectState"/> and set it with the specified field name in the specified object state.
+    /// </summary>
+    /// <param name="state">The object state to set the new <see cref="ObjectState"/> in.</param>
+    /// <param name="name">The field name to set.</param>
+    /// <returns>The newly created <see cref="ObjectState"/>.</returns>
+    /// <exception cref="ArgumentNullException">If <paramref name="state"/> is <see langword="null"/>.</exception>
     public static ObjectState SetNewObject(this IObjectState state, string name)
     {
       if (state == null)

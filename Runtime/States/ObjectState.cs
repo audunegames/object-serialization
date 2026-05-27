@@ -4,11 +4,38 @@ using System.Collections.Generic;
 
 namespace Audune.Serialization
 {
-  // State that defines an object containing key-state pairs
+  /// <summary>
+  /// Class that defines a state that contains fields of states with a <see cref="System.String"/> ma,e.
+  /// </summary>
   public sealed class ObjectState : State, IObjectState, IEquatable<ObjectState>
   {
-    // The dictionary of key-value pairs
+    /// <summary>
+    /// The dictionary of pairs of the state.
+    /// </summary>
     private readonly Dictionary<string, State> _fields;
+    
+    
+    /// <inheritdoc/>
+    public int count => _fields.Count;
+
+    /// <inheritdoc/>
+    public IEnumerable<string> keys => _fields.Keys;
+
+    /// <inheritdoc/>
+    public IEnumerable<State> values => _fields.Values;
+    
+    
+    /// <inheritdoc/>
+    int IReadOnlyCollection<KeyValuePair<string, State>>.Count => count;
+    
+    /// <inheritdoc/>
+    State IReadOnlyDictionary<string, State>.this[string key] => ((IObjectState)this)[key];
+
+    /// <inheritdoc/>
+    IEnumerable<string> IReadOnlyDictionary<string, State>.Keys => keys;
+
+    /// <inheritdoc/>
+    IEnumerable<State> IReadOnlyDictionary<string, State>.Values => values;
 
 
     // Constructor
@@ -21,8 +48,8 @@ namespace Audune.Serialization
     }
 
 
-    #region Returning states
-    // Return the state as an object state
+    #region Returning and converting states
+    /// <inheritdoc/>
     public override IObjectState AsObject()
     {
       return this;
@@ -30,23 +57,13 @@ namespace Audune.Serialization
     #endregion
 
     #region Object state implementation
-    // Return the field count of the object state
-    public int count => _fields.Count;
-
-    // Return the keys of the object state
-    public IEnumerable<string> keys => _fields.Keys;
-
-    // Return the values of the object state
-    public IEnumerable<State> values => _fields.Values;
-
-
-    // Get a field with the specified name
+    /// <inheritdoc/>
     public State Get(string name, State defaultValue = null)
     {
       return _fields.GetValueOrDefault(name, defaultValue);
     }
 
-    // Get a field with the specified name and state type
+    /// <inheritdoc/>
     public TState Get<TState>(string name, TState defaultValue = null) where TState : State
     {
       var state = Get(name, (State)defaultValue);
@@ -56,7 +73,7 @@ namespace Audune.Serialization
       return tState;
     }
 
-    // Return if a field with the specified name exists and store the item
+    /// <inheritdoc/>
     public bool TryGet(string name, out State value)
     {
       var inRange = _fields.ContainsKey(name);
@@ -64,7 +81,7 @@ namespace Audune.Serialization
       return inRange;
     }
 
-    // Return if a field with the specified name and state type exists and store the field value
+    /// <inheritdoc/>
     public bool TryGet<TState>(string name, out TState value) where TState : State
     {
       if (TryGet(name, out var state) && state is TState tState)
@@ -79,37 +96,51 @@ namespace Audune.Serialization
       }
     }
 
-    // Set a field with the specified name
+    /// <inheritdoc/>
     public void Set(string name, State value)
     {
       _fields[name] = value;
     }
     
-    // Remove the field with the specified name
+    /// <inheritdoc/>
     public void Remove(string name)
     {
       _fields.Remove(name);
     }
 
-    // Return if the object contains the specified field key
+    /// <inheritdoc/>
     public bool ContainsKey(string name)
     {
       return _fields.ContainsKey(name);
     }
 
-    // Return if the object contains the specified field value
+    /// <inheritdoc/>
     public bool ContainsValue(State value)
     {
       return _fields.ContainsValue(value);
     }
+    #endregion
+    
+    #region Read-only dictionary implementation
+    /// <inheritdoc/>
+    bool IReadOnlyDictionary<string, State>.ContainsKey(string key)
+    {
+      return ContainsKey(key);
+    }
 
-    // Return a generic enumerator over the fields
+    /// <inheritdoc/>
+    bool IReadOnlyDictionary<string, State>.TryGetValue(string key, out State value)
+    {
+      return TryGet(key, out value);
+    }
+
+    /// <inheritdoc/>
     public IEnumerator<KeyValuePair<string, State>> GetEnumerator()
     {
       return _fields.GetEnumerator();
     }
 
-    // Return an enumerator over the fields
+    /// <inheritdoc/>
     IEnumerator IEnumerable.GetEnumerator()
     {
       return _fields.GetEnumerator();
@@ -117,32 +148,42 @@ namespace Audune.Serialization
     #endregion
 
     #region Equatable implementation
-    // Return if the hash equals another object
+    /// <inheritdoc/>
     public override bool Equals(object other)
     {
       return Equals(other as ObjectState);
     }
 
-    // Return if the hash equals another hash
+    /// <inheritdoc/>
     public bool Equals(ObjectState other)
     {
       return other is not null && EqualityComparer<Dictionary<string, State>>.Default.Equals(_fields, other._fields);
     }
 
-    // Return the hash code of the hash
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
       return HashCode.Combine(_fields);
     }
 
 
-    // Return if the state equals another state using the equal operator
+    /// <summary>
+    /// Return if the specified <see cref="ObjectState"/>s are equal to each other.
+    /// </summary>
+    /// <param name="left">The left <see cref="ObjectState"/> to compare.</param>
+    /// <param name="right">The right <see cref="ObjectState"/> to compare.</param>
+    /// <returns>If the specified <see cref="ObjectState"/>s are equal.</returns>
     public static bool operator ==(ObjectState left, ObjectState right)
     {
       return Equals(left, right);
     }
 
-    // Return if the state does not equal another state using the not equal operator
+    /// <summary>
+    /// Return if the specified <see cref="ObjectState"/>s are not equal to each other.
+    /// </summary>
+    /// <param name="left">The left <see cref="ObjectState"/> to compare.</param>
+    /// <param name="right">The right <see cref="ObjectState"/> to compare.</param>
+    /// <returns>If the specified <see cref="ObjectState"/>s are equal.</returns>
     public static bool operator !=(ObjectState left, ObjectState right)
     {
       return !(left == right);
