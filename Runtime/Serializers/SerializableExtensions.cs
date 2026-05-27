@@ -4,11 +4,20 @@ using System.Linq;
 
 namespace Audune.Serialization
 {
-  // Class that defines extension methods for serialization
+  /// <summary>
+  /// Class that defines extension methods for serialization.
+  /// </summary>
   public static class SerializableExtensions
   {
     #region Serializing enumerables to list states
-    // Serialize all objects in an enumerable to a list state
+    /// <summary>
+    /// Serialize all objects in the specified enumerable to a list state.
+    /// </summary>
+    /// <param name="context">The context for serialization.</param>
+    /// <param name="enumerable">The enumerable containing the objects to serialize.</param>
+    /// <typeparam name="T">The type of the values to serialize.</typeparam>
+    /// <returns>A list state containing the serialized states.</returns>
+    /// <exception cref="ArgumentNullException">If the context or enumerable are null.</exception>
     public static ListState SerializeToList<T>(this ISerializationContext context, IEnumerable<T> enumerable)
     {
       if (context == null)
@@ -25,7 +34,14 @@ namespace Audune.Serialization
     #endregion
     
     #region Deserializing enumerables from list states
-    // Deserialize all items in a list state to an enumerable
+    /// <summary>
+    /// Deserialize all items in the specified list state to an enumerable.
+    /// </summary>
+    /// <param name="context">The context for deserialization.</param>
+    /// <param name="state">The state to deserialize.</param>
+    /// <typeparam name="T">The type of the values to deserialize.</typeparam>
+    /// <returns>An enumerable containing the deserialized objects.</returns>
+    /// <exception cref="ArgumentNullException">If the context or state are null.</exception>
     public static IEnumerable<T> DeserializeFromList<T>(this IDeserializationContext context, IListState state)
     {
       if (context == null)
@@ -38,7 +54,14 @@ namespace Audune.Serialization
     }
 
     
-    // Deserialize all items in a list state and add them into the specified collection
+    /// <summary>
+    /// Deserialize all items in the specified list state and add them to the specified collection.
+    /// </summary>
+    /// <param name="context">The context for deserialization.</param>
+    /// <param name="state">The state to deserialize.</param>
+    /// <param name="collection">The collection to add the deserialized objects to.</param>
+    /// <typeparam name="T">The type of the values to deserialize.</typeparam>
+    /// <exception cref="ArgumentNullException">If the context, state, or collection are null.</exception>
     public static void AddDeserializationFromList<T>(this IDeserializationContext context, IListState state, ICollection<T> collection)
     {
       if (context == null)
@@ -52,7 +75,16 @@ namespace Audune.Serialization
         collection.Add(e);
     }
     
-    // Deserialize all items in a list state and add them into the specified dictionary with the specified key selector
+    /// <summary>
+    /// Deserialize all items in the specified list state and add them to the specified dictionary with the specified key selector.
+    /// </summary>
+    /// <param name="context">The context for deserialization.</param>
+    /// <param name="state">The state to deserialize.</param>
+    /// <param name="dictionary">The dictionary to add the deserialized objects to.</param>
+    /// <param name="keySelector">A function that defines how to select a key from a deserialized object.</param>
+    /// <typeparam name="T">The type of the values to deserialize.</typeparam>
+    /// <typeparam name="TKey">The type of the key of the dictionary.</typeparam>
+    /// <exception cref="ArgumentNullException">If the context, state, dictionary, or keySelector are null.</exception>
     public static void AddDeserializationFromList<T, TKey>(this IDeserializationContext context, IListState state, IDictionary<TKey, T> dictionary, Func<T, TKey> keySelector)
     {
       if (context == null)
@@ -70,7 +102,14 @@ namespace Audune.Serialization
     #endregion
     
     #region Serializing enumerables to object states
-    // Serialize all objects in an enumerable to an object state
+    /// <summary>
+    /// Serialize all objects in the specified enumerable to an object state.
+    /// </summary>
+    /// <param name="context">The context for serialization.</param>
+    /// <param name="enumerable">The enumerable containing key-value pairs that contain the objects to serialize.</param>
+    /// <typeparam name="T">The type of the values to serialize.</typeparam>
+    /// <returns>An object state containing the serialized states.</returns>
+    /// <exception cref="ArgumentNullException">If the context or enumerable are null.</exception>
     public static ObjectState SerializeToObject<T>(this ISerializationContext context, IEnumerable<KeyValuePair<string, T>> enumerable)
     {
       if (context == null)
@@ -85,7 +124,15 @@ namespace Audune.Serialization
       return state;
     }
     
-    // Serialize all objects in an enumerable to an object state by using the specified key selector
+    /// <summary>
+    /// Serialize all objects in the specified enumerable to an object state by using the specified key selector.
+    /// </summary>
+    /// <param name="context">The context for serialization.</param>
+    /// <param name="enumerable">The enumerable containing the objects to serialize.</param>
+    /// <param name="keySelector">A function that defines how to select a key from an object to serialize.</param>
+    /// <typeparam name="T">The type of the values to serialize.</typeparam>
+    /// <returns>An object state containing the serialized states.</returns>
+    /// <exception cref="ArgumentNullException">If the context, enumerable, or keySelector are null.</exception>
     public static ObjectState SerializeToObject<T>(this ISerializationContext context, IEnumerable<T> enumerable, Func<T, string> keySelector)
     {
       if (context == null)
@@ -98,15 +145,34 @@ namespace Audune.Serialization
       return SerializeToObject(context, enumerable.Select(e => KeyValuePair.Create(keySelector(e), e)));
     }
     
-    // Serialize all Unity objects in an enumerable to an object state
+    /// <summary>
+    /// Serialize all Unity objects in the specified enumerable to an object state.
+    /// </summary>
+    /// <param name="context">The context for serialization.</param>
+    /// <param name="enumerable">The enumerable containing the Unity objects to serialize.</param>
+    /// <typeparam name="T">The type of the Unity objects to serialize.</typeparam>
+    /// <returns>An object state containing the serialized states.</returns>
+    /// <exception cref="ArgumentNullException">If the context or enumerable are null.</exception>
     public static ObjectState SerializeToObject<T>(this ISerializationContext context, IEnumerable<T> enumerable) where T : UnityEngine.Object
     {
+      if (context == null)
+        throw new ArgumentNullException(nameof(context));
+      if (enumerable == null)
+        throw new ArgumentNullException(nameof(enumerable));
+      
       return SerializeToObject(context, enumerable, e => e.name);
     }
     #endregion
     
-    #region DeDeserializing enumerables from object states
-    // Deserialize all items in an object state to an enumerable
+    #region Deserializing enumerables from object states
+    /// <summary>
+    /// Deserialize all items in the specified object state to an enumerable.
+    /// </summary>
+    /// <param name="context">The context for deserialization.</param>
+    /// <param name="state">The state to deserialize.</param>
+    /// <typeparam name="T">The type of the values to deserialize.</typeparam>
+    /// <returns>An enumerable containing key-value pairs that contain the deserialized objects.</returns>
+    /// <exception cref="ArgumentNullException">if the context or state are null.</exception>
     public static IEnumerable<KeyValuePair<string, T>> DeserializeFromObject<T>(this IDeserializationContext context, IObjectState state)
     {
       if (context == null)
@@ -119,7 +185,14 @@ namespace Audune.Serialization
     }
     
     
-    // Deserialize all items in an object state and add them into the specified collection
+    /// <summary>
+    /// Deserialize all items in the specified object state and add them to the specified collection.
+    /// </summary>
+    /// <param name="context">The context for deserialization.</param>
+    /// <param name="state">The state to deserialize.</param>
+    /// <param name="collection">The collection to add the deserialized objects to.</param>
+    /// <typeparam name="T">The type of the values to deserialize.</typeparam>
+    /// <exception cref="ArgumentNullException">If the context, state, or collection are null.</exception>
     public static void AddDeserializationFromObject<T>(this IDeserializationContext context, IObjectState state, ICollection<KeyValuePair<string, T>> collection)
     {
       if (context == null)
@@ -133,7 +206,16 @@ namespace Audune.Serialization
         collection.Add(e);
     }
     
-    // Deserialize all items in an object state and add them into the specified dictionary with the specified key selector
+    /// <summary>
+    /// Deserialize all items in the specified object state and add them to the specified dictionary with the specified key selector.
+    /// </summary>
+    /// <param name="context">The context for deserialization.</param>
+    /// <param name="state">The state to deserialize.</param>
+    /// <param name="dictionary">The dictionary to add the deserialized objects to.</param>
+    /// <param name="keySelector">A function that defines how to select a key from a name.</param>
+    /// <typeparam name="T">The type of the values to deserialize.</typeparam>
+    /// <typeparam name="TKey">The type of the key of the dictionary.</typeparam>
+    /// <exception cref="ArgumentNullException">If the context, state, dictionary, or keySelector are null.</exception>
     public static void AddDeserializationFromObject<T, TKey>(this IDeserializationContext context, IObjectState state, IDictionary<TKey, T> dictionary, Func<string, TKey> keySelector)
     {
       if (context == null)
@@ -150,7 +232,15 @@ namespace Audune.Serialization
     }
     
     
-    // Deserialize all items in an object state and apply them to the specified enumerable of objects
+    /// <summary>
+    /// Deserialize all items in the specified object state and apply them to the specified enumerable of objects.
+    /// </summary>
+    /// <param name="context">The context for deserialization.</param>
+    /// <param name="state">The state to deserialize.</param>
+    /// <param name="enumerable">The enumerable of objects to apply the deserialized states to based on their key.</param>
+    /// <param name="keySelector">A function that defines how to select a key from an object in the enumerable.</param>
+    /// <typeparam name="T">The type of the values to deserialize.</typeparam>
+    /// <exception cref="ArgumentNullException">If the context, state, enumerable, or keySelector are null.</exception>
     public static void ApplyDeserializationFromObject<T>(this IDeserializationContext context, IObjectState state, IEnumerable<T> enumerable, Func<T, string> keySelector)
     {
       if (context == null)
@@ -170,7 +260,14 @@ namespace Audune.Serialization
       }
     }
 
-    // Deserialize all items in an object state and apply them to the specified enumerable of Unity objects
+    /// <summary>
+    /// Deserialize all items in the specified object state and apply them to the specified enumerable of Unity objects.
+    /// </summary>
+    /// <param name="context">The context for deserialization.</param>
+    /// <param name="state">The state to deserialize.</param>
+    /// <param name="enumerable">The enumerable of Unity objects to apply the deserialized states to based on their key.</param>
+    /// <typeparam name="T">The type of the Unity objects to deserialize.</typeparam>
+    /// <exception cref="ArgumentNullException">If the context, state, or enumerable are null.</exception>
     public static void ApplyDeserializationFromObject<T>(this IDeserializationContext context, ObjectState state, IEnumerable<T> enumerable) where T : UnityEngine.Object
     {
       if (context == null)

@@ -2,11 +2,22 @@
 
 namespace Audune.Serialization
 {
-  // Class that defines an exception thrown when decoding a state fails
+  /// <summary>
+  /// Class that defines an exception thrown when decoding a state fails.
+  /// </summary>
   public class DecodingException : SerializerException
   {
-    // Constructor
+    /// <summary>
+    /// Constructor for a message.
+    /// </summary>
+    /// <param name="message">The message of the exception.</param>
     public DecodingException(string message) : base(message) { }
+    
+    /// <summary>
+    /// Constructor for a message and inner exception.
+    /// </summary>
+    /// <param name="message">The message of the exception.</param>
+    /// <param name="innerException">The exception that caused this exception to be thrown.</param>
     public DecodingException(string message, Exception innerException) : base(message, innerException) { }
   }
 }

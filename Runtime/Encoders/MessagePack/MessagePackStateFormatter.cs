@@ -9,18 +9,30 @@ namespace Audune.Serialization
   // Class that defines a MessagePack formatter for states
   internal class MessagePackStateFormatter : IMessagePackFormatter<State>
   {
-    // The compound type registry for the formatter
+    /// <summary>
+    /// The extension type registry for the formatter
+    /// </summary>
     private readonly IExtensionTypeRegistry _extensionTypeRegistry;
 
-    // Constructor
-    public MessagePackStateFormatter(IExtensionTypeRegistry compoundTypeRegistry)
+    
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="extensionTypeRegistry">The registry to use for encoding extension types.</param>
+    public MessagePackStateFormatter(IExtensionTypeRegistry extensionTypeRegistry)
     {
-      _extensionTypeRegistry = compoundTypeRegistry;
+      _extensionTypeRegistry = extensionTypeRegistry;
     }
 
 
     #region Serialization methods
-    // Serialize a state
+    /// <summary>
+    /// Serialize a state.
+    /// </summary>
+    /// <param name="writer">The MessagePack serializer to write to.</param>
+    /// <param name="state">The state to serialize.</param>
+    /// <param name="options">The options for the MessagePack serializer.</param>
+    /// <exception cref="MessagePackSerializationException">if the state could not be serialized.</exception>
     public void Serialize(ref MessagePackWriter writer, State state, MessagePackSerializerOptions options)
     {
       switch (state)
@@ -50,7 +62,12 @@ namespace Audune.Serialization
       }
     }
 
-    // Serialize a value state
+    /// <summary>
+    /// Serialize a value state.
+    /// </summary>
+    /// <param name="writer">The MessagePack serializer to write to.</param>
+    /// <param name="state">The state to serialize.</param>
+    /// <exception cref="MessagePackSerializationException">if the state could not be serialized.</exception>
     private void SerializeValueState(ref MessagePackWriter writer, ValueState state)
     {
       if (state == null || state.value is null)
@@ -87,7 +104,12 @@ namespace Audune.Serialization
         throw new MessagePackSerializationException($"Unsupported value state value {state.value.GetType()}");
     }
 
-    // Serialize a list state
+    /// <summary>
+    /// Serialize a list state.
+    /// </summary>
+    /// <param name="writer">The MessagePack serializer to write to.</param>
+    /// <param name="state">The state to serialize.</param>
+    /// <param name="options">The options for the MessagePack serializer.</param>
     private void SerializeListState(ref MessagePackWriter writer, ListState state, MessagePackSerializerOptions options)
     {
       writer.WriteArrayHeader(state.count);
@@ -97,7 +119,12 @@ namespace Audune.Serialization
       }
     }
 
-    // Serialize an object state
+    /// <summary>
+    /// Serialize an object state
+    /// </summary>
+    /// <param name="writer">The MessagePack serializer to write to.</param>
+    /// <param name="state">The state to serialize.</param>
+    /// <param name="options">The options for the MessagePack serializer.</param>
     private void SerializeObjectState(ref MessagePackWriter writer, ObjectState state, MessagePackSerializerOptions options)
     {
       writer.WriteMapHeader(state.count);
@@ -108,7 +135,12 @@ namespace Audune.Serialization
       }
     }
 
-    // Serialize a compound state
+    /// <summary>
+    /// Serialize a compound state.
+    /// </summary>
+    /// <param name="writer">The MessagePack serializer to write to.</param>
+    /// <param name="state">The state to serialize.</param>
+    /// <param name="options">The options for the MessagePack serializer.</param>
     private void SerializeCompoundState(ref MessagePackWriter writer, CompoundExtensionState state, MessagePackSerializerOptions options)
     {
       var extensionBuffer = new ArrayBufferWriter<byte>();
@@ -120,7 +152,12 @@ namespace Audune.Serialization
       writer.WriteExtensionFormat(new ExtensionResult(state.type.code, new ReadOnlySequence<byte>(extensionBuffer.WrittenMemory)));
     }
 
-    // Serialize a raw state
+    /// <summary>
+    /// Serialize a raw state.
+    /// </summary>
+    /// <param name="writer">The MessagePack serializer to write to.</param>
+    /// <param name="state">The state to serialize.</param>
+    /// <param name="options">The options for the MessagePack serializer.</param>
     private void SerializeRawState(ref MessagePackWriter writer, RawExtensionState state, MessagePackSerializerOptions options)
     {
       var extensionBuffer = new ArrayBufferWriter<byte>();
@@ -133,7 +170,13 @@ namespace Audune.Serialization
     #endregion
 
     #region Deserialization methods
-    // Deserialize a state
+    /// <summary>
+    /// Deserialize a state,
+    /// </summary>
+    /// <param name="reader">The MessagePack deserializer to read from.</param>
+    /// <param name="options">The options for the MessagePack deserializer.</param>
+    /// <returns>The deserialized state.</returns>
+    /// <exception cref="MessagePackSerializationException">If the state could not be deserialized.</exception>
     public State Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
     {
       options.Security.DepthStep(ref reader);
@@ -156,7 +199,12 @@ namespace Audune.Serialization
       return state;
     }
 
-    // Deserialize an integer format
+    /// <summary>
+    /// Deserialize an integer format.
+    /// </summary>
+    /// <param name="reader">The MessagePack deserializer to read from.</param>
+    /// <returns>The deserialized state.</returns>
+    /// <exception cref="MessagePackSerializationException">If the state could not be deserialized.</exception>
     private State DeserializeIntegerFormat(ref MessagePackReader reader)
     {
       return reader.NextCode switch
@@ -175,7 +223,12 @@ namespace Audune.Serialization
       };
     }
 
-    // Deserialize a float format
+    /// <summary>
+    /// Deserialize a float format.
+    /// </summary>
+    /// <param name="reader">The MessagePack deserializer to read from.</param>
+    /// <returns>The deserialized state.</returns>
+    /// <exception cref="MessagePackSerializationException">If the state could not be deserialized.</exception>
     private State DeserializeFloatFormat(ref MessagePackReader reader)
     {
       return reader.NextCode switch
@@ -186,14 +239,23 @@ namespace Audune.Serialization
       };
     }
 
-    // Deserialize a binary format
+    /// <summary>
+    /// Deserialize a binary format.
+    /// </summary>
+    /// <param name="reader">The MessagePack deserializer to read from.</param>
+    /// <returns>The deserialized state.</returns>
     private State DeserializeBinaryFormat(ref MessagePackReader reader)
     {
       var byteSpan = reader.ReadBytes();
       return new ValueState(byteSpan.HasValue ? byteSpan.Value.ToArray() : Array.Empty<byte>());
     }
 
-    // Deserialize an array format
+    /// <summary>
+    /// Deserialize an array format.
+    /// </summary>
+    /// <param name="reader">The MessagePack deserializer to read from.</param>
+    /// <param name="options">The options for the MessagePack deserializer.</param>
+    /// <returns>The deserialized state.</returns>
     private ListState DeserializeArrayFormat(ref MessagePackReader reader, MessagePackSerializerOptions options)
     {
       var length = reader.ReadArrayHeader();
@@ -206,7 +268,12 @@ namespace Audune.Serialization
       return listState;
     }
 
-    // Deserialize a map format
+    /// <summary>
+    /// Deserialize a map format.
+    /// </summary>
+    /// <param name="reader">The MessagePack deserializer to read from.</param>
+    /// <param name="options">The options for the MessagePack deserializer.</param>
+    /// <returns>The deserialized state.</returns>
     private ObjectState DeserializeMapFormat(ref MessagePackReader reader, MessagePackSerializerOptions options)
     {
       var length = reader.ReadMapHeader();
@@ -220,7 +287,15 @@ namespace Audune.Serialization
       return objectState;
     }
 
-    // Deserialize an extension format
+    /// <summary>
+    /// Deserialize an extension format.
+    /// </summary>
+    /// <param name="reader">The MessagePack deserializer to read from.</param>
+    /// <param name="options">The options for the MessagePack deserializer.</param>
+    /// <returns>The deserialized state.</returns>
+    /// <exception cref="MessagePackSerializationException">If the state could not be deserialized.</exception>
+    /// <exception cref="StateException">If the state does not equal the expected state.</exception>
+    /// <exception cref="StateTypeException">If the value of the state is of the wrong type.</exception>
     private State DeserializeExtensionFormat(ref MessagePackReader reader, MessagePackSerializerOptions options)
     {
       var header = reader.ReadExtensionFormatHeader();

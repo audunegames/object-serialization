@@ -2,14 +2,22 @@ using MessagePack;
 
 namespace Audune.Serialization
 {
-  // Class that defines a MessagePack encoder
+  /// <summary>
+  /// Class that defines a MessagePack encoder.
+  /// </summary>
   public sealed class MessagePackEncoder : IEncoder
   {
-    // The options of the encoder
+    /// <summary>
+    /// The options of the encoder.
+    /// </summary>
     private readonly MessagePackSerializerOptions _options;
 
 
-    // Constructor
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="extensionTypeRegistry">The registry to use for encoding extension types.</param>
+    /// <param name="compression">The compression to use.</param>
     public MessagePackEncoder(IExtensionTypeRegistry extensionTypeRegistry, MessagePackCompression compression)
     {
       _options = MessagePackSerializerOptions.Standard
@@ -19,7 +27,12 @@ namespace Audune.Serialization
     
 
     #region Encoder implementation
-    // Encode a state to a byte array
+    /// <summary>
+    /// Encode a state to a byte array.
+    /// </summary>
+    /// <param name="state">The state to encode.</param>
+    /// <returns>A byte array representing the encoded state.</returns>
+    /// <exception cref="EncodingException">If the state could not be serialized to a MessagePack format.</exception>
     public byte[] Encode(State state)
     {
       try
@@ -32,7 +45,12 @@ namespace Audune.Serialization
       }
     }
 
-    // Decode a state from a byte array
+    /// <summary>
+    /// Decode a state from a byte array
+    /// </summary>
+    /// <param name="data">The byte array to decode.</param>
+    /// <returns>A state representing the decoded byte array.</returns>
+    /// <exception cref="DecodingException">If the state could not be deserialized from a MessagePack format.</exception>
     public State Decode(byte[] data)
     {
       try

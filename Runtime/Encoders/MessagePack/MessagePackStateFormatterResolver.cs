@@ -3,20 +3,32 @@ using MessagePack.Formatters;
 
 namespace Audune.Serialization
 {
-  // Class that defines a MessagePack formatter resolver for states
+  /// <summary>
+  /// Class that defines a MessagePack formatter resolver for states.
+  /// </summary>
   internal class MessagePackStateFormatterResolver : IFormatterResolver
   {
-    // The formatters for the resolver
+    /// <summary>
+    /// The formatters for the resolver.
+    /// </summary>
     private readonly IMessagePackFormatter<State> _stateFormatter;
 
-    // Constructor
+    
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="extensionTypeRegistry">The registry to use for encoding extension types.</param>
     public MessagePackStateFormatterResolver(IExtensionTypeRegistry extensionTypeRegistry)
     {
       _stateFormatter = new MessagePackStateFormatter(extensionTypeRegistry);
     }
 
 
-    // Return the formatter for the specified type
+    /// <summary>
+    /// Return the formatter for the specified type.
+    /// </summary>
+    /// <typeparam name="T">The type to return the formatter for.</typeparam>
+    /// <returns>The formatter corresponding to the type.</returns>
     public IMessagePackFormatter<T> GetFormatter<T>()
     {
       if (typeof(State).IsAssignableFrom(typeof(T)))

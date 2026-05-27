@@ -1,21 +1,39 @@
 namespace Audune.Serialization
 {
-  // Interface that defines a class as deserializable
+  /// <summary>
+  /// Interface that marks a class as deserializable.
+  /// </summary>
   public interface IDeserializable
   {
-    // Deserialize the object from a state
+    /// <summary>
+    /// Deserialize the object from a state.
+    /// </summary>
+    /// <param name="state">The state to deserialize.</param>
+    /// <param name="context">The context for deserialization.</param>
     public void Deserialize(State state, IDeserializationContext context);
   }
 
 
-  // Interface that defines a class as deserializable from the specified state type
+  /// <summary>
+  /// Interface that marks a class as deserializable from the specified state type.
+  /// </summary>
+  /// <typeparam name="TState">The type of the state to deserialize from.</typeparam>
   public interface IDeserializable<TState> : IDeserializable where TState : State
   {
-    // Serialize the object to a state of the specified type
+    /// <summary>
+    /// Deserialize the object from a state of the specified type.
+    /// </summary>
+    /// <param name="state">The state to deserialize.</param>
+    /// <param name="context">The context for deserialization.</param>
     public void Deserialize(TState state, IDeserializationContext context);
 
 
-    // Serialize the object to a state
+    /// <summary>
+    /// Deserialize the object from a state.
+    /// </summary>
+    /// <param name="state">The state to deserialize.</param>
+    /// <param name="context">The context for deserialization.</param>
+    /// <exception cref="StateTypeException">If the state is of the wrong type.</exception>
     void IDeserializable.Deserialize(State state, IDeserializationContext context)
     {
       if (state is not TState tState)
