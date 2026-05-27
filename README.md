@@ -10,12 +10,13 @@ See the [wiki](https://github.com/audunegames/object-serialization/wiki) of the 
 
 * Serialize and deserialize primtive values and Unity structs to and from intermediate state classes respectively. Easily create your own serializable classes and structs by implementing the `ISerializable` interface and crafting a state structure reminiscent of JSON.
 * Encode and decode states and objects that can be serialized to states to a string or byte array for storage on a filesystem or sending over a network.
-* Use the [Object Persistence package](https://github.com/audunegames/object-persistence) for a higher-level library to save and load states to and from the filesystem, repsectively, or any other filesystem adapter.
+* Use the [Object Persistence package](https://github.com/audunegames/object-persistence) for a higher-level library to save and load states to and from the filesystem, respectively, or any other filesystem adapter.
 
 ### Supported serialization types
 
 * C# value types: `bool`, `byte`, `sbyte`, `ushort`, `short`, `uint`, `int`, `ulong`, `long`, `float`, `double`.
 * C# reference types: `string`, `byte[]`.
+* C# structs: `DateTime`, `Guid`.
 * Unity structs: `Vector2`, `Vector3`, `Vector4`, `Vector2Int`, `Vector3Int`, `Color32`, `Color`, `Quaternion`, `Rect`, `Bounds`, `RectInt`, `BoundsInt`.
 * Any custom class that implements `Audune.Serialization.ISerializable`.
 
