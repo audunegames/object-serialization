@@ -5,10 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.1.0] - 2026-05-27
 
 ### Added
 
+- Added documentation comments for all scripts.
 - Added support for serializing `System.DateTime` through the timestamp extension type.
 - Added support for serializing `System.Guid` with a raw exension state.
 - Added `IsNull` method to the state class to check if its value is null.
