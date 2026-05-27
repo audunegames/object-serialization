@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Audune.Serialization
 {
   /// <summary>
@@ -12,10 +14,22 @@ namespace Audune.Serialization
     public void RegisterExtensionType(ExtensionType type);
 
     /// <summary>
+    /// Register all specified extension types.
+    /// </summary>
+    /// <param name="extensionTypes">An enumerable of extension types to register.</param>
+    public void RegisterExtensionTypes(IEnumerable<ExtensionType> extensionTypes);
+
+    /// <summary>
     /// Unregister the specified extension type.
     /// </summary>
     /// <param name="type">The extension type to unregister.</param>
     public void UnregisterExtensionType(ExtensionType type);
+
+    /// <summary>
+    /// Unregister all specified extension types.
+    /// </summary>
+    /// <param name="extensionTypes">An enumerable of extension types to unregister.</param>
+    public void UnregisterExtensionTypes(IEnumerable<ExtensionType> extensionTypes);
 
     /// <summary>
     /// Return if an extension type for the specified code exists and store the extension type in <paramref name="type"/>.

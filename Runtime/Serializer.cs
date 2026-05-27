@@ -5,24 +5,38 @@ using MessagePack;
 
 namespace Audune.Serialization
 {
-  // Class that defines the serializer for encoding and decoding states and objects
+  /// <summary>
+  /// Class that defines the serializer for encoding and decoding states and objects.
+  /// </summary>
   public sealed class Serializer : ISerializationContext, IDeserializationContext, IExtensionTypeRegistry
   {
-    // The encoder type of the serializer
+    /// <summary>
+    /// The encoder type of the serializer.
+    /// </summary>
     public readonly EncoderType encoderType;
 
 
-    // The encoder for the serializer
+    /// <summary>
+    /// The encoder for the serializer.
+    /// </summary>
     private readonly IEncoder _encoder;
 
-    // The compound types for the serializer
-    private readonly Dictionary<sbyte, ExtensionType> _compoundTypes = new();
+    /// <summary>
+    /// The registered extension types for the serializer.
+    /// </summary>
+    private readonly Dictionary<sbyte, ExtensionType> _extensionTypes = new();
 
-    // The type adapters for the serializer
-    private readonly Dictionary<Type, object> _typeAdapters = new(TypeAdapter.StandardTypeAdapters);
+    /// <summary>
+    /// The registered type adapters for the serializer.
+    /// </summary>
+    private readonly Dictionary<Type, object> _typeAdapters = new();
 
 
-    // Constructor
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="encoderType">The encoder type of the serializer.</param>
+    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="encoderType"/> is not a valid encoder type.</exception>
     public Serializer(EncoderType encoderType)
     {
       this.encoderType = encoderType;
@@ -35,61 +49,78 @@ namespace Audune.Serialization
         _ => throw new ArgumentOutOfRangeException($"Unsupported encoder typer {encoderType}"),
       };
 
-      foreach (var compoundType in ExtensionType.StandardExtensionTypes)
-        RegisterExtensionType(compoundType);
+      foreach (var extensionType in ExtensionType.StandardExtensionTypes)
+        RegisterExtensionType(extensionType);
+      
+      foreach (var e in TypeAdapter.StandardTypeAdapters)
+        _typeAdapters.Add(e.Key, e.Value);
     }
 
 
     #region Managing extension types
-    // Register the specified extension type
+    /// <inheritdoc/>
     public void RegisterExtensionType(ExtensionType extensionType)
     {
-      _compoundTypes.Add(extensionType.code, extensionType);
+      _extensionTypes.Add(extensionType.code, extensionType);
     }
 
-    // Register all specified extension types
+    /// <inheritdoc/>
     public void RegisterExtensionTypes(IEnumerable<ExtensionType> extensionTypes)
     {
       foreach (var compoundType in extensionTypes)
         RegisterExtensionType(compoundType);
     }
 
-    // Unregister the specified extension type
+    /// <inheritdoc/>
     public void UnregisterExtensionType(ExtensionType extensionType)
     {
-      _compoundTypes.Remove(extensionType.code);
+      _extensionTypes.Remove(extensionType.code);
     }
 
-    // Unregister all specified extension types
+    /// <inheritdoc/>
     public void UnregisterExtensionTypes(IEnumerable<ExtensionType> extensionTypes)
     {
       foreach (var extensionType in extensionTypes)
         UnregisterExtensionType(extensionType);
     }
 
-    // Return if a compound type for the specified extension code exists and store the compound type
+    /// <inheritdoc/>
     bool IExtensionTypeRegistry.TryGetExtensionTypeByCode(sbyte extensionCode, out ExtensionType extensionType)
     {
-      return _compoundTypes.TryGetValue(extensionCode, out extensionType);
+      return _extensionTypes.TryGetValue(extensionCode, out extensionType);
     }
     #endregion
 
     #region Managing type adapters
-    // Register a type adapter for the specified type
+    /// <summary>
+    /// Register a type adapter for the specified type.
+    /// </summary>
+    /// <param name="typeAdapter">The type adapter to register.</param>
+    /// <typeparam name="T">The type for which to register the type adapter.</typeparam>
+    /// <returns>This serializer.</returns>
     public Serializer RegisterTypeAdapter<T>(ITypeAdapter<T> typeAdapter)
     {
       _typeAdapters.Add(typeof(T), typeAdapter);
       return this;
     }
 
-    // Unregister a type adapter for the specified type
+    /// <summary>
+    /// Unregister a type adapter for the specified type.
+    /// </summary>
+    /// <typeparam name="T">The type for which to unregister the type adapter.</typeparam>
+    /// <returns>This serializer.</returns>
     public Serializer UnregisterTypeAdapter<T>()
     {
       _typeAdapters.Remove(typeof(T));
       return this;
     }
 
-    // Return if a type adapter for the specified type exists and store the type adapter
+    /// <summary>
+    /// Return if a type adapter for the specified type exists and store the type adapter in <paramref name="typeAdapter"/>.
+    /// </summary>
+    /// <param name="type">The type to check.</param>
+    /// <param name="typeAdapter">The type adapter that matches the type.</param>
+    /// <returns>If a type adapter for the specified type exists.</returns>
     private bool TryGetTypeAdapter(Type type, out object typeAdapter)
     {
       typeAdapter = _typeAdapters.Where(e => e.Key.IsAssignableFrom(type)).Select(e => e.Value).FirstOrDefault();
@@ -98,7 +129,13 @@ namespace Audune.Serialization
     #endregion
 
     #region Serializing objects
-    // Serialize the specified object to a state
+    /// <summary>
+    /// Serialize the specified object to a state.
+    /// </summary>
+    /// <param name="value">The value to deserialize.</param>
+    /// <typeparam name="T">The type of the value to deserialize.</typeparam>
+    /// <returns>The serialized state.</returns>
+    /// <exception cref="SerializingException">If the serialization failed.</exception>
     public State Serialize<T>(T value)
     {
       if (value is ISerializable serializableValue)
@@ -115,7 +152,13 @@ namespace Audune.Serialization
     #endregion
 
     #region Deserializing objects
-    // Deserialize the specified state to a new object
+    /// <summary>
+    /// Deserialize the specified state to a new object.
+    /// </summary>
+    /// <param name="state">The state to deserialize.</param>
+    /// <typeparam name="T">The type of the value to deserialize.</typeparam>
+    /// <returns>The deserialized object.</returns>
+    /// <exception cref="DeserializingException">If the deserialization failed.</exception>
     public T Deserialize<T>(State state)
     {
       if (typeof(IDeserializable).IsAssignableFrom(typeof(T)))
@@ -141,7 +184,13 @@ namespace Audune.Serialization
       return typeAdapter.FromState(state);
     }
 
-    // Deserialize the specified state into an existing object
+    /// <summary>
+    /// Deserialize the specified state into an existing object.
+    /// </summary>
+    /// <param name="state">The state to deserialize.</param>
+    /// <param name="value">The existing object to deserialize the state into.</param>
+    /// <typeparam name="T">The type of the value to deserialize.</typeparam>
+    /// <exception cref="DeserializingException">If the deserialization failed.</exception>
     public void Deserialize<T>(State state, T value)
     {
       if (value is IDeserializable deserializableValue)
@@ -161,13 +210,22 @@ namespace Audune.Serialization
     #endregion
 
     #region Encoding states and objects
-    // Encode the specified state to a byte array
+    /// <summary>
+    /// Encode the specified state to a byte array.
+    /// </summary>
+    /// <param name="state">The state to encode.</param>
+    /// <returns>The encoded. byte array.</returns>
     public byte[] EncodeState(State state)
     {
       return _encoder.Encode(state);
     }
 
-    // Encode the specified serializable object to a byte array
+    /// <summary>
+    /// Encode the specified serializable object to a byte array.
+    /// </summary>
+    /// <param name="value">The value to encode.</param>
+    /// <typeparam name="T">The type of the value to encode.</typeparam>
+    /// <returns>The encoded. byte array.</returns>
     public byte[] Encode<T>(T value)
     {
       var state = Serialize(value);
@@ -176,20 +234,34 @@ namespace Audune.Serialization
     #endregion
 
     #region Decoding states and objects
-    // Decode the specified byte array to a state
+    /// <summary>
+    /// Decode the specified byte array to a state.
+    /// </summary>
+    /// <param name="data">The byte array to decode.</param>
+    /// <returns>The decoded state.</returns>
     public State DecodeState(byte[] data)
     {
       return _encoder.Decode(data);
     }
 
-    // Decode the specified byte array to a new object
+    /// <summary>
+    /// Decode the specified byte array to a new object.
+    /// </summary>
+    /// <param name="data">The byte array to decode.</param>
+    /// <typeparam name="T">The type of the object to decode.</typeparam>
+    /// <returns>The decoded object.</returns>
     public T Decode<T>(byte[] data)
     {
       var state = DecodeState(data);
       return Deserialize<T>(state);
     }
 
-    // Decode the specified byte array into an existing object
+    /// <summary>
+    /// Decode the specified byte array into an existing object.
+    /// </summary>
+    /// <param name="data">The byte array to decode.</param>
+    /// <param name="value">The existing object to decode the byte array into.</param>
+    /// <typeparam name="T">The type of the object to decode.</typeparam>
     public void Decode<T>(byte[] data, T value)
     {
       var state = DecodeState(data);
