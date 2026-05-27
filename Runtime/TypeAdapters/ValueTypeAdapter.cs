@@ -1,15 +1,18 @@
 namespace Audune.Serialization
 {
-  // Class that defines a type adapter for value types
+  /// <summary>
+  /// Class that defines a type adapter types that convert to a <see cref="ValueState"/>.
+  /// </summary>
+  /// <typeparam name="T">The type to serialize and deserialize.</typeparam>
   public sealed class ValueTypeAdapter<T> : ITypeAdapter<T>
   {
-    // Convert the specified value to a state
+    /// <inheritdoc/>
     State ITypeAdapter<T>.ToState(T value)
     {
       return new ValueState(value);
     }
 
-    // Convert the specified state to a value
+    /// <inheritdoc/>
     T ITypeAdapter<T>.FromState(State state)
     {
       return state.AsValue().Get<T>();

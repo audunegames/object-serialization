@@ -3,26 +3,28 @@ using UnityEngine;
 
 namespace Audune.Serialization
 {
-  // Class that defines a type adapter for Vector3 objects
+  /// <summary>
+  /// Class that defines a type adapter for <see cref="UnityEngine.Vector3"/> objects.
+  /// </summary>
   internal class Vector3TypeAdapter : ICompoundTypeAdapter<Vector3>
   {
-    // The extension type of the type adapter
+    /// <inheritdoc/>
     public CompoundExtensionType extensionType => ExtensionType.Vector3;
 
     
-    // Convert the specified value to a compound state
+    /// <inheritdoc/>
     public IReadOnlyList<ValueState> ToCompoundState(Vector3 value)
     {
       return new ValueState[] { new(value.x), new(value.y), new(value.z) };
     }
 
-    // Convert the specified compound state to a value
+    /// <inheritdoc/>
     public Vector3 FromCompoundState(IReadOnlyList<ValueState> states)
     {
       return new Vector3((float)states[0], (float)states[1], (float)states[2]);
     }
     
-    // Convert the specified compound state into an existing value
+    /// <inheritdoc/>
     public void FromCompoundState(IReadOnlyList<ValueState> states, Vector3 value)
     {
       value.Set((float)states[0], (float)states[1], (float)states[2]);

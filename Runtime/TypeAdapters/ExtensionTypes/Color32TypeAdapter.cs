@@ -2,34 +2,39 @@ using UnityEngine;
 
 namespace Audune.Serialization
 {
-  // Class that defines a type adapter for Color32 objects
+  /// <summary>
+  /// Class that defines a type adapter for <see cref="UnityEngine.Color32"/> objects.
+  /// </summary>
   internal class Color32TypeAdapter : IRawTypeAdapter<Color32>, IRawTypeAdapter<Color>
   {
-    // The extension type of the type adapter
+    /// <inheritdoc/>
     public RawExtensionType extensionType => ExtensionType.Color32;
+    
+    /// <inheritdoc/>
+    RawExtensionType IRawTypeAdapter<Color>.extensionType => ExtensionType.Color32;
 
     
-    // Convert the specified value to a byte array
+    /// <inheritdoc/>
     public byte[] ToBytes(Color32 value)
     {
       var bytes = new[] { value.r, value.g, value.b, value.a };
       return bytes;
     }
 
-    // Convert the specified byte array to a value
+    /// <inheritdoc/>
     public Color32 FromBytes(byte[] bytes)
     {
       return new Color32(bytes[0], bytes[1], bytes[2], bytes[3]);
     }
 
 
-    // Convert the specified color value to a byte array
+    /// <inheritdoc/>
     byte[] IRawTypeAdapter<Color>.ToBytes(Color value)
     {
       return ToBytes(value);
     }
 
-    // Convert the specified byte array to a color value
+    /// <inheritdoc/>
     Color IRawTypeAdapter<Color>.FromBytes(byte[] bytes)
     {
       return FromBytes(bytes);

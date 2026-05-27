@@ -1,32 +1,52 @@
 namespace Audune.Serialization
 {
-  // Interface that defines a type adapter for raw extension types
+  /// <summary>
+  /// Interface that defines a type adapter for types that convert to a <see cref="RawExtensionState"/>.
+  /// </summary>
+  /// <typeparam name="T">The type to serialize and deserialize.</typeparam>
   public interface IRawTypeAdapter<T> : ITypeAdapter<T>
   {    
-    // The extension type of the type adapter
+    /// <summary>
+    /// Return the extension type of the type adapter
+    /// </summary>
     public RawExtensionType extensionType { get; }
 
 
-    // Convert the specified value to a byte array
+    /// <summary>
+    /// Convert the specified value to a byte array.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>A byte array representing the converted value.</returns>
+    /// <exception cref="StateException">If converting the state failed.</exception>
     public byte[] ToBytes(T value);
 
-    // Convert the specified byte array to a value
+    /// <summary>
+    /// Convert the specified byte array to a value.
+    /// </summary>
+    /// <param name="bytes">The byte array to convert.</param>
+    /// <returns>A value that represents the converted byte array.</returns>
+    /// <exception cref="StateException">If converting the state failed.</exception>
     public T FromBytes(byte[] bytes);
 
-    // Convert the specified byte array into an existing value
+    /// <summary>
+    /// Convert the specified byte array into an existing value.
+    /// </summary>
+    /// <param name="bytes">The byte array to convert.</param>
+    /// <param name="value">The existing value to convert the byte array into.</param>
+    /// <exception cref="StateException">If converting the state failed.</exception>
     public void FromBytes(byte[] bytes, T value)
     {
       throw new StateException($"Type adapter {GetType()} does not support deserializing states into existing objects");
     }
 
 
-    // Convert the specified value to a state
+    /// <inheritdoc/>
     State ITypeAdapter<T>.ToState(T value)
     {
       return new RawExtensionState(extensionType, ToBytes(value));
     }
 
-    // Convert the specified state to a value
+    /// <inheritdoc/>
     T ITypeAdapter<T>.FromState(State state)
     {
       if (state is not RawExtensionState rawState)
@@ -38,16 +58,10 @@ namespace Audune.Serialization
       return FromBytes(rawState.bytes);
     }
 
-    // Convert the specified state into an existing value
+    /// <inheritdoc/>
     void ITypeAdapter<T>.FromState(State state, T value)
     {
-      if (state is not RawExtensionState rawState)
-        throw new StateTypeException(typeof(RawExtensionState), state.GetType());
-
-      if (rawState.type != extensionType)
-        throw new StateException($"Expected state with extension type {extensionType}, but got {rawState.type}");
-
-      FromBytes(rawState.bytes, value);
+      throw new StateException($"Type adapter {GetType()} does not support deserializing states into existing objects");
     }
   }
 }

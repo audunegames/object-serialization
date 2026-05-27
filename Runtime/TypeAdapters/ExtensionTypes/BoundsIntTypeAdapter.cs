@@ -3,20 +3,22 @@ using UnityEngine;
 
 namespace Audune.Serialization
 {
-  // Class that defines a type adapter for BoundsInt objects
+  /// <summary>
+  /// Class that defines a type adapter for <see cref="UnityEngine.BoundsInt"/> objects.
+  /// </summary>
   internal class BoundsIntTypeAdapter : ICompoundTypeAdapter<BoundsInt>
   {
-    // The extension type of the type adapter
+    /// <inheritdoc/>
     public CompoundExtensionType extensionType => ExtensionType.BoundsInt;
 
 
-    // Convert the specified value to a compound state
+    /// <inheritdoc/>
     public IReadOnlyList<ValueState> ToCompoundState(BoundsInt value)
     {
       return new ValueState[] { new(value.position.x), new(value.position.y), new(value.position.z), new(value.size.x), new(value.size.y), new(value.size.z) };
     }
 
-    // Convert the specified compound state to a value
+    /// <inheritdoc/>
     public BoundsInt FromCompoundState(IReadOnlyList<ValueState> states)
     {
       var position = new Vector3Int((int)states[0], (int)states[1], (int)states[2]);
@@ -24,7 +26,7 @@ namespace Audune.Serialization
       return new BoundsInt(position, size);
     }
     
-    // Convert the specified compound state into an existing value
+    /// <inheritdoc/>
     public void FromCompoundState(IReadOnlyList<ValueState> states, BoundsInt value)
     {
       value.position.Set((int)states[0], (int)states[1], (int)states[2]);
