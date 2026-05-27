@@ -60,7 +60,7 @@ namespace Audune.Serialization
     /// </summary>
     /// <param name="amount">The amount of places to advance.</param>
     /// <returns>The just scanned character.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">If amount is not at least 1.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="amount"/> is not at least 1.</exception>
     public char Advance(int amount = 1)
     {
       if (amount < 1)
@@ -76,7 +76,7 @@ namespace Audune.Serialization
     /// </summary>
     /// <param name="predicate">The predicate to match against.</param>
     /// <returns>If the next character matches the predicate.</returns>
-    /// <exception cref="ArgumentNullException">If predicate is null.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="predicate"/> is <see langword="null"/>.</exception>
     public bool Check(Predicate<char> predicate)
     {
       if (predicate == null)
@@ -100,7 +100,7 @@ namespace Audune.Serialization
     /// </summary>
     /// <param name="str">The string to match against.</param>
     /// <returns>If the next character sequence matches the specified string.</returns>
-    /// <exception cref="ArgumentNullException">If str is null.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="str"/> is <see langword="null"/>.</exception>
     public bool Check(string str)
     {
       if (str == null)
@@ -114,7 +114,7 @@ namespace Audune.Serialization
     /// </summary>
     /// <param name="predicate">The predicate to match against.</param>
     /// <returns>If the next character matches the predicate.</returns>
-    /// <exception cref="ArgumentNullException">If predicate is null.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="predicate"/> is <see langword="null"/>.</exception>
     public bool Match(Predicate<char> predicate)
     {
       if (predicate == null)
@@ -144,7 +144,7 @@ namespace Audune.Serialization
     /// </summary>
     /// <param name="str">The string to match against.</param>
     /// <returns>If the next character sequence matches the specified string.</returns>
-    /// <exception cref="ArgumentNullException">If str is null.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="str"/> is <see langword="null"/>.</exception>
     public bool Match(string str)
     {
       if (str == null)
@@ -165,7 +165,7 @@ namespace Audune.Serialization
     /// <param name="predicate">The predicate to match against.</param>
     /// <param name="expected">A string describing the expected format.</param>
     /// <returns>If the next character matches the predicate.</returns>
-    /// <exception cref="ArgumentNullException">If predicate is null.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="predicate"/> is <see langword="null"/>.</exception>
     /// <exception cref="FormatException">If the consuming was unsuccessful.</exception>
     public char Consume(Predicate<char> predicate, string expected)
     {
@@ -194,7 +194,7 @@ namespace Audune.Serialization
     /// </summary>
     /// <param name="str">The string to match against.</param>
     /// <returns>If the next character matches the specified string.</returns>
-    /// <exception cref="ArgumentNullException">If str is null.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="str"/> is <see langword="null"/>.</exception>
     /// <exception cref="FormatException">If the consuming was unsuccessful.</exception>
     public string Consume(string str)
     {
@@ -213,7 +213,7 @@ namespace Audune.Serialization
     /// </summary>
     /// <param name="predicate">The predicate to match against.</param>
     /// <returns>A string containing the consumed characters.</returns>
-    /// <exception cref="ArgumentNullException">If predicate is null.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="predicate"/> is <see langword="null"/>.</exception>
     public string ReadWhile(Predicate<char> predicate)
     {
       if (predicate == null)
@@ -242,7 +242,7 @@ namespace Audune.Serialization
     /// <param name="firstExpected">A string describing the expected format of the first character.</param>
     /// <param name="restPredicate">The predicate to match the rest of the characters against.</param>
     /// <returns>A string containing the consumed characters.</returns>
-    /// <exception cref="ArgumentNullException">If firstPredicate, firstExpected, or restPredicate are null.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="firstPredicate"/>, <paramref name="firstExpected"/>, or <paramref name="restPredicate"/> are <see langword="null"/>.</exception>
     public string ReadWhile(Predicate<char> firstPredicate, string firstExpected, Predicate<char> restPredicate)
     {
       if (firstPredicate == null)
@@ -273,7 +273,7 @@ namespace Audune.Serialization
     /// Consume the next character while it matches the predicate without saving the consumed characters.
     /// </summary>
     /// <param name="predicate">The predicate to match against.</param>
-    /// <exception cref="ArgumentNullException">If predicate is null.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="predicate"/> is <see langword="null"/>.</exception>
     public void SkipWhile(Predicate<char> predicate)
     {
       if (predicate == null)
