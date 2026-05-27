@@ -16,7 +16,7 @@ namespace Audune.Serialization
     // Return if the value of the state is of the specified type and store the value
     public bool TryGet<TValue>(out TValue castValue)
     {
-      return value.TryCast(out castValue).IsSuccesful();
+      return value.TryCast(out castValue).IsSuccessful();
     }
 
     // Return if the value of the state is of the specified type

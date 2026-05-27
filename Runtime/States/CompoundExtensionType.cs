@@ -27,7 +27,7 @@ namespace Audune.Serialization
       for (var i = 0; i < states.Length; i ++)
       {
         // Check if the types match
-        if (!states[i].value.TryCast(fields[i].type).IsSuccesful())
+        if (!states[i].value.TryCast(fields[i].type).IsSuccessful())
           throw new StateException($"Expected value of type {fields[i].type} at index {i}, but got {states[i].value.GetType()}");
       }
     }

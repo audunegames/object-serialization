@@ -18,22 +18,22 @@ namespace Audune.Serialization
       var path = default(StatePath);
 
       var scanner = new Scanner(input);
-      while (!scanner.AtEnd)
+      while (!scanner.atEnd)
       {
-        if (scanner.Index > 0 && scanner.Match('['))
+        if (scanner.index > 0 && scanner.Match('['))
         {
-          var index = scanner.ReadInt();
+          var index = scanner.ReadInteger();
           path = new Index(path, index);
           scanner.Consume(']');
         }
-        else if (scanner.Index == 0 || scanner.Match('.'))
+        else if (scanner.index == 0 || scanner.Match('.'))
         {
-          var name = scanner.ReadString();
+          var name = scanner.ReadIdentifier();
           path = new Access(path, name);
         }
         else
         {
-          throw new FormatException($"Found invalid character '{scanner.Next}' at position {scanner.Index}");
+          throw new FormatException($"Found invalid character '{scanner.next}' at position {scanner.index}");
         }
       }
 

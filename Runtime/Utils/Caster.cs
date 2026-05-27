@@ -2,43 +2,90 @@ using System;
 
 namespace Audune.Serialization
 {
-  // Class that defines extension methods for objects to cast it to a different type
+  /// <summary>
+  /// Class that defines extension methods for objects to cast them to a different type.
+  /// </summary>
   internal static class Caster
   {
-    // Enum that defines the result of a type cast
+    /// <summary>
+    /// Enum that defines the result of a type cast.
+    /// </summary>
     public enum Result
     {
+      /// <summary>
+      /// The value is null.
+      /// </summary>
       Null,
+      
+      /// <summary>
+      /// The value is of the same type as the expected type.
+      /// </summary>
       SameTypeCast,
+      
+      /// <summary>
+      /// The type of the value is assignable from the expected type.
+      /// </summary>
       AssignableTypeCast,
+      
+      /// <summary>
+      /// The value is convertable from the expected type.
+      /// </summary>
       ConvertableTypeCast,
+      
+      /// <summary>
+      /// The type cast is invalid.
+      /// </summary>
       InvalidTypeCast,
+      
+      /// <summary>
+      /// The type cast caused an overflow.
+      /// </summary>
       OverflowTypeCast,
     }
 
 
-    // Return how the specified value can be cast to the expected type
+    /// <summary>
+    /// Return in what way the specified value can be cast to the expected type
+    /// </summary>
+    /// <param name="value">The value to check.</param>
+    /// <param name="expectedType">The expected type of the type cast.</param>
+    /// <returns>The result of the type cast.</returns>
     public static Result TryCast(this object value, Type expectedType)
     {
       return TryCastInternal(value, expectedType).result;
     }
 
-    // Return how the specified value can be cast to the expected type and store the cast value
+    /// <summary>
+    /// Return in what way the specified value can be cast to the expected type and store the cast value.
+    /// </summary>
+    /// <param name="value">The value to check.</param>
+    /// <param name="castValue">The cast value.</param>
+    /// <typeparam name="TObject">The expected type of the type cast.</typeparam>
+    /// <returns>The result of the type cast.</returns>
     public static Result TryCast<TObject>(this object value, out TObject castValue)
     {
       var cast = TryCastInternal(value, typeof(TObject));
-      castValue = cast.result.IsSuccesful() ? (TObject)cast.castValue : default;
+      castValue = cast.result.IsSuccessful() ? (TObject)cast.castValue : default;
       return cast.result;
     }
 
-    // Return if the result of a type cast was succesful
-    public static bool IsSuccesful(this Result result)
+    /// <summary>
+    /// Return if the result of a type cast was successful.
+    /// </summary>
+    /// <param name="result">The result of a type case.</param>
+    /// <returns>If the result of the type cast was successful.</returns>
+    public static bool IsSuccessful(this Result result)
     {
       return result == Result.Null || result == Result.SameTypeCast || result == Result.AssignableTypeCast || result == Result.ConvertableTypeCast;
     }
     
 
-    // Return how the specified value can be cast to the expected type and the cast value
+    /// <summary>
+    /// Return in what way the specified value can be cast to the expected type and return the cast value.
+    /// </summary>
+    /// <param name="value">The value to cast.</param>
+    /// <param name="expectedType">The expected type of the type cast.</param>
+    /// <returns>A tuple containing the result of the type cast and the cast value.</returns>
     private static (Result result, object castValue) TryCastInternal(object value, Type expectedType)
     {
       // Check if the value is null
