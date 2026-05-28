@@ -37,6 +37,10 @@ namespace Audune.Serialization
     {
       switch (state)
       {
+        case null:
+          SerializeValueState(ref writer, null);
+          break;
+        
         case ValueState valueState:
           SerializeValueState(ref writer, valueState);
           break;
