@@ -187,7 +187,7 @@ namespace Audune.Serialization
 
       var state = reader.NextMessagePackType switch
       {
-        MessagePackType.Nil => new ValueState(null),
+        MessagePackType.Nil => DeserializeNullFormat(ref reader),
         MessagePackType.Boolean => new ValueState(reader.ReadBoolean()),
         MessagePackType.Integer => DeserializeIntegerFormat(ref reader),
         MessagePackType.Float => DeserializeFloatFormat(ref reader),
@@ -201,6 +201,17 @@ namespace Audune.Serialization
       
       reader.Depth--;
       return state;
+    }
+
+    /// <summary>
+    /// Deserialize a null format.
+    /// </summary>
+    /// <param name="reader">The MessagePack deserializer to read from.</param>
+    /// <returns>The deserialized state.</returns>
+    private State DeserializeNullFormat(ref MessagePackReader reader)
+    {
+      reader.ReadNil();
+      return new ValueState(null);
     }
 
     /// <summary>
