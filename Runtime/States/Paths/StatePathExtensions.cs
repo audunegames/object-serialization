@@ -149,28 +149,67 @@ namespace Audune.Serialization
     #endregion
 
     #region List and object state extensions
-    // Get all items with the specified path of the specified type
-    public static IEnumerable<State> GetItemsAtPath(this State state, StatePath path)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="root"></param>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException">If <paramref name="root"/> or <paramref name="path"/> as <see langword="null"/>.</exception>
+    public static IEnumerable<State> GetListItemsAtPath(this State root, StatePath path)
     {
-      return state.GetAtPath(path).IsList(out var listState) ? listState : Enumerable.Empty<State>();
+      if (root == null)
+        throw new ArgumentNullException(nameof(root));
+      if (path == null)
+        throw new ArgumentNullException(nameof(path));
+      
+      return root.GetAtPath(path).IsList(out var listState) ? listState : Enumerable.Empty<State>();
     }
 
-    // Get all fields with the specified path of the specified type
-    public static IEnumerable<KeyValuePair<string, State>> GetFieldsAtPath(this State state, StatePath path)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="root"></param>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException">If <paramref name="root"/> or <paramref name="path"/> as <see langword="null"/>.</exception>
+    public static IEnumerable<KeyValuePair<State, State>> GetObjectEntriesAtPath(this State root, StatePath path)
     {
-      return state.GetAtPath(path).IsObject(out var objectState) ? objectState : Enumerable.Empty<KeyValuePair<string, State>>();
+      if (root == null)
+        throw new ArgumentNullException(nameof(root));
+      if (path == null)
+        throw new ArgumentNullException(nameof(path));
+      
+      return root.GetAtPath(path).IsObject(out var objectState) ? objectState : Enumerable.Empty<KeyValuePair<State, State>>();
     }
 
-    // Get all field keys with the specified path of the specified type
-    public static IEnumerable<string> GetKeysAtPath(this State state, StatePath path)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="root"></param>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException">If <paramref name="root"/> or <paramref name="path"/> as <see langword="null"/>.</exception>
+    public static IEnumerable<State> GetObjectKeysAtPath(this State root, StatePath path)
     {
-      return state.GetAtPath(path).IsObject(out var objectState) ? objectState.keys : Enumerable.Empty<string>();
+      if (root == null)
+        throw new ArgumentNullException(nameof(root));
+      if (path == null)
+        throw new ArgumentNullException(nameof(path));
+      
+      return root.GetAtPath(path).IsObject(out var objectState) ? objectState.keys : Enumerable.Empty<State>();
     }
 
-    // Get all field values with the specified path of the specified type
-    public static IEnumerable<State> GetAllValuesAtPath(this State state, StatePath path)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="root"></param>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException">If <paramref name="root"/> or <paramref name="path"/> as <see langword="null"/>.</exception>
+    public static IEnumerable<State> GetObjectValuesAtPath(this State root, StatePath path)
     {
-      return state.GetAtPath(path).IsObject(out var objectState) ? objectState.values : Enumerable.Empty<State>();
+      return root.GetAtPath(path).IsObject(out var objectState) ? objectState.values : Enumerable.Empty<State>();
     }
     #endregion
   }
