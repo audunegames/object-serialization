@@ -9,6 +9,54 @@ namespace Audune.Serialization
   /// </summary>
   public static class SerializableExtensions
   {
+    #region Serializing enums
+    /// <summary>
+    /// Serialize the specified <see langword="enum"/> value to a state.
+    /// </summary>
+    /// <param name="context">The context for serialization.</param>
+    /// <param name="value">The value to serialize.</param>
+    /// <typeparam name="T">The type of the <see langword="enum"/> to serialize.</typeparam>
+    /// <returns>The serialized state.</returns>
+    /// <exception cref="ArgumentNullException"></exception>
+    public static State SerializeEnum<T>(this ISerializationContext context, T value) where T : struct, Enum
+    {
+      if (context == null)
+        throw new ArgumentNullException(nameof(context));
+      
+      // Serialize the underlying value of the enum
+      var underlyingValue = Convert.ChangeType(value, Enum.GetUnderlyingType(typeof(T)));
+      var serializeMethod = context.GetType()
+        .GetMethod("Serialize", 1, new[] { Type.MakeGenericMethodParameter(0) })
+        .MakeGenericMethod(underlyingValue.GetType());
+      return (State)serializeMethod.Invoke(context, new object[] { value });
+    }
+    #endregion
+    
+    #region Deserializing enums
+    /// <summary>
+    /// Deserialize the specified state to an <see langword="enum"/> value.
+    /// </summary>
+    /// <param name="context">The context for deserialization.</param>
+    /// <param name="state">The state to deserialize.</param>
+    /// <typeparam name="T">The type of the <see langword="enum"/> to deserialize.</typeparam>
+    /// <returns>The deserialized value.</returns>
+    /// <exception cref="ArgumentNullException"></exception>
+    public static T DeserializeEnum<T>(this IDeserializationContext context, State state) where T : struct, Enum
+    {
+      if (context == null)
+        throw new ArgumentNullException(nameof(context));
+      if (state == null)
+        throw new ArgumentNullException(nameof(state));
+      
+      // Deserialize the underlying value of the enum
+      var deserializeMethod = context.GetType()
+        .GetMethod("Deserialize", 1, new[] { typeof(State) })
+        .MakeGenericMethod(Enum.GetUnderlyingType(typeof(T)));
+      var underlyingValue = deserializeMethod.Invoke(context, new object[] { state });
+      return (T)underlyingValue;
+    }
+    #endregion
+    
     #region Serializing enumerables to list states
     /// <summary>
     /// Serialize all objects in the specified enumerable to a list state.
