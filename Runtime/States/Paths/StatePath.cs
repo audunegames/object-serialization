@@ -2,17 +2,32 @@ using System;
 
 namespace Audune.Serialization
 {
-  // Class that defines a path in a state
+  /// <summary>
+  /// Class that defines a path in a state.
+  /// </summary>
   public abstract class StatePath
   {
-    // Evaluate the path as a getter on the specified state
-    internal abstract State EvaluateGetter(State state);
+    /// <summary>
+    /// Evaluate the path as a getter on the specified state.
+    /// </summary>
+    /// <param name="root">The root state to evaluate the path on.</param>
+    /// <returns>The retrieved state at the path.</returns>
+    internal abstract State EvaluateGetter(State root);
 
-    // Evaluate the path as a setter on the specified state
-    internal abstract void EvaluateSetter(State state, State value);
+    /// <summary>
+    /// Evaluate the path as a setter on the specified state.
+    /// </summary>
+    /// <param name="root">The root state to evaluate the path on.</param>
+    /// <param name="value">The state to set as the path.</param>
+    internal abstract void EvaluateSetter(State root, State value);
 
 
-    // Parse a path
+    /// <summary>
+    /// Parse a path.
+    /// </summary>
+    /// <param name="input">The input to parse.</param>
+    /// <returns></returns>
+    /// <exception cref="FormatException"></exception>
     public static StatePath Parse(string input)
     {
       var path = default(StatePath);
@@ -23,13 +38,13 @@ namespace Audune.Serialization
         if (scanner.index > 0 && scanner.Match('['))
         {
           var index = scanner.ReadInteger();
-          path = new Index(path, index);
+          path = new Indexer(path, index);
           scanner.Consume(']');
         }
         else if (scanner.index == 0 || scanner.Match('.'))
         {
           var name = scanner.ReadIdentifier();
-          path = new Access(path, name);
+          path = new Accessor(path, name);
         }
         else
         {
@@ -40,95 +55,119 @@ namespace Audune.Serialization
       return path;
     }
 
-    // Parse a path using an implicit operator
+    /// <summary>
+    /// Convert a <see cref="String"/> value to a <see cref="StatePath"/>.
+    /// </summary>
+    /// <param name="input">The value to convert.</param>
+    /// <returns>The converted path.</returns>
     public static implicit operator StatePath(string input) 
     { 
       return Parse(input);
     }
 
 
-    // Class that defines an indexer path
-    internal sealed class Index : StatePath
+    /// <summary>
+    /// Class that defines an indexer path.
+    /// </summary>
+    internal sealed class Indexer : StatePath
     {
-      // The parent of the path
+      /// <summary>
+      /// The parent of the path.
+      /// </summary>
       private readonly StatePath _parent;
 
-      // The index of the path
+      /// <summary>
+      /// The index of the path.
+      /// </summary>
       private readonly int _index;
 
 
-      // Constructor
-      internal Index(StatePath parent, int index)
+      /// <summary>
+      /// Constructor.
+      /// </summary>
+      /// <param name="parent">The parent of the path.</param>
+      /// <param name="index">The index of the path.</param>
+      internal Indexer(StatePath parent, int index)
       {
         _parent = parent;
         _index = index;
       }
 
 
-      // Evaluate the path as a getter on the specified state
-      internal override State EvaluateGetter(State state)
+      /// <inheritdoc/>
+      internal override State EvaluateGetter(State root)
       {
-        var parentState = _parent?.EvaluateGetter(state) ?? state;
+        var parentState = _parent?.EvaluateGetter(root) ?? root;
 
         if (parentState is not IListState listState)
-          throw new StatePathException($"Expected state of type {typeof(IListState)} but found {state.GetType()}");
+          throw new StatePathException($"Expected state of type {typeof(IListState)} but found {root.GetType()}");
         else if (!listState.TryGet(_index, out var itemState))
           throw new StatePathException($"Undefined item with index {_index}");
         else
           return itemState;
       }
 
-      // Evaluate the path as a setter on the specified state
-      internal override void EvaluateSetter(State state, State value)
+      /// <inheritdoc/>
+      internal override void EvaluateSetter(State root, State value)
       {
-        var parentState = _parent?.EvaluateGetter(state) ?? state;
+        var parentState = _parent?.EvaluateGetter(root) ?? root;
 
         if (parentState is not IListState listState)
-          throw new StatePathException($"Expected state of type {typeof(IListState)} but found {state.GetType()}");
+          throw new StatePathException($"Expected state of type {typeof(IListState)} but found {root.GetType()}");
         else
           listState.Set(_index, value);
       }
     }
 
 
-    // Class that defines an accessor path
-    internal sealed class Access : StatePath
+    /// <summary>
+    /// Class that defines an accessor path.
+    /// </summary>
+    internal sealed class Accessor : StatePath
     {
-      // The parent of the path
+      /// <summary>
+      /// The parent of the path.
+      /// </summary>
       private readonly StatePath _parent;
 
-      // The name of the path
+      /// <summary>
+      /// The name of the path.
+      /// </summary>
       private readonly string _name;
 
 
-      // Constructor
-      internal Access(StatePath parent, string name)
+      /// <summary>
+      /// Constructor.
+      /// </summary>
+      /// <param name="parent">The parent of the path.</param>
+      /// <param name="name">The name of the path.</param>
+      internal Accessor(StatePath parent, string name)
       {
         _parent = parent;
         _name = name;
       }
 
 
-      // Evaluate the path as a getter on the specified state
-      internal override State EvaluateGetter(State state)
+      /// <inheritdoc/>
+      internal override State EvaluateGetter(State root)
       {
-        var parentState = _parent?.EvaluateGetter(state) ?? state;
+        var parentState = _parent?.EvaluateGetter(root) ?? root;
 
         if (parentState is not IObjectState objectState)
-          throw new StatePathException($"Expected state of type {typeof(IObjectState)} but found {state.GetType()}");
+          throw new StatePathException($"Expected state of type {typeof(IObjectState)} but found {root.GetType()}");
         else if (!objectState.TryGet(_name, out var fieldState))
           throw new StatePathException($"Undefined field with name {_name}");
         else 
           return fieldState;
       }
 
-      // Evaluate the path as a setter on the specified state
-      internal override void EvaluateSetter(State state, State value)
+      /// <inheritdoc/>
+      internal override void EvaluateSetter(State root, State value)
       {
-        var parentState = _parent?.EvaluateGetter(state) ?? state;
+        var parentState = _parent?.EvaluateGetter(root) ?? root;
 
         if (parentState is not IObjectState objectState)
-          throw new StatePathException($"Expected state of type {typeof(IObjectState)} but found {state.GetType()}");
+          throw new StatePathException($"Expected state of type {typeof(IObjectState)} but found {root.GetType()}");
         else
           objectState.Set(_name, value);
       }
