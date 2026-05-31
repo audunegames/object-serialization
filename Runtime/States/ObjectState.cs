@@ -1,53 +1,54 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Audune.Serialization
 {
   /// <summary>
-  /// Class that defines a state that contains fields of states with a <see cref="System.String"/> ma,e.
+  /// Class that defines a state that contains key-value pairs of states.
   /// </summary>
   public sealed class ObjectState : State, IObjectState, IEquatable<ObjectState>
   {
     /// <summary>
-    /// The dictionary of pairs of the state.
+    /// The dictionary of items of the state.
     /// </summary>
-    private readonly Dictionary<string, State> _fields;
+    private readonly Dictionary<State, State> _items;
     
     
     /// <inheritdoc/>
-    public int count => _fields.Count;
+    public int count => _items.Count;
 
     /// <inheritdoc/>
-    public IEnumerable<string> keys => _fields.Keys;
+    public IEnumerable<State> keys => _items.Keys;
 
     /// <inheritdoc/>
-    public IEnumerable<State> values => _fields.Values;
+    public IEnumerable<State> values => _items.Values;
     
     
     /// <inheritdoc/>
-    int IReadOnlyCollection<KeyValuePair<string, State>>.Count => count;
+    int IReadOnlyCollection<KeyValuePair<State, State>>.Count => count;
     
     /// <inheritdoc/>
-    State IReadOnlyDictionary<string, State>.this[string key] => ((IObjectState)this)[key];
+    State IReadOnlyDictionary<State, State>.this[State key] => ((IObjectState)this)[key];
 
     /// <inheritdoc/>
-    IEnumerable<string> IReadOnlyDictionary<string, State>.Keys => keys;
+    IEnumerable<State> IReadOnlyDictionary<State, State>.Keys => keys;
 
     /// <inheritdoc/>
-    IEnumerable<State> IReadOnlyDictionary<string, State>.Values => values;
+    IEnumerable<State> IReadOnlyDictionary<State, State>.Values => values;
 
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="enumerable">The enumerable whose items are copied to the new state.</param>
-    public ObjectState(IEnumerable<KeyValuePair<string, State>> enumerable = null)
+    public ObjectState(IEnumerable<KeyValuePair<State, State>> enumerable = null)
     {
       if (enumerable != null)
-        _fields = new Dictionary<string, State>(enumerable);
+        _items = new Dictionary<State, State>(enumerable);
       else
-        _fields = new Dictionary<string, State>();
+        _items = new Dictionary<State, State>();
     }
 
 
@@ -61,15 +62,15 @@ namespace Audune.Serialization
 
     #region Object state implementation
     /// <inheritdoc/>
-    public State Get(string name, State defaultValue = null)
+    public State Get(State key, State defaultValue = null)
     {
-      return _fields.GetValueOrDefault(name, defaultValue);
+      return _items.GetValueOrDefault(key, defaultValue);
     }
 
     /// <inheritdoc/>
-    public TState Get<TState>(string name, TState defaultValue = null) where TState : State
+    public TState Get<TState>(State key, TState defaultValue = null) where TState : State
     {
-      var state = Get(name, (State)defaultValue);
+      var state = Get(key, (State)defaultValue);
       if (state is not TState tState)
         throw new StateTypeException(typeof(TState), state.GetType());
 
@@ -77,17 +78,17 @@ namespace Audune.Serialization
     }
 
     /// <inheritdoc/>
-    public bool TryGet(string name, out State value)
+    public bool TryGet(State key, out State value)
     {
-      var inRange = _fields.ContainsKey(name);
-      value = inRange ? _fields[name] : null;
+      var inRange = _items.ContainsKey(key);
+      value = inRange ? _items[key] : null;
       return inRange;
     }
 
     /// <inheritdoc/>
-    public bool TryGet<TState>(string name, out TState value) where TState : State
+    public bool TryGet<TState>(State key, out TState value) where TState : State
     {
-      if (TryGet(name, out var state) && state is TState tState)
+      if (TryGet(key, out var state) && state is TState tState)
       {
         value = tState;
         return true;
@@ -100,53 +101,53 @@ namespace Audune.Serialization
     }
 
     /// <inheritdoc/>
-    public void Set(string name, State value)
+    public void Set(State key, State value)
     {
-      _fields[name] = value;
+      _items[key] = value;
     }
     
     /// <inheritdoc/>
-    public void Remove(string name)
+    public void Remove(State key)
     {
-      _fields.Remove(name);
+      _items.Remove(key);
     }
 
     /// <inheritdoc/>
-    public bool ContainsKey(string name)
+    public bool ContainsKey(State key)
     {
-      return _fields.ContainsKey(name);
+      return _items.ContainsKey(key);
     }
 
     /// <inheritdoc/>
     public bool ContainsValue(State value)
     {
-      return _fields.ContainsValue(value);
+      return _items.ContainsValue(value);
     }
     #endregion
     
     #region Read-only dictionary implementation
     /// <inheritdoc/>
-    bool IReadOnlyDictionary<string, State>.ContainsKey(string key)
+    bool IReadOnlyDictionary<State, State>.ContainsKey(State key)
     {
       return ContainsKey(key);
     }
 
     /// <inheritdoc/>
-    bool IReadOnlyDictionary<string, State>.TryGetValue(string key, out State value)
+    bool IReadOnlyDictionary<State, State>.TryGetValue(State key, out State value)
     {
       return TryGet(key, out value);
     }
 
     /// <inheritdoc/>
-    public IEnumerator<KeyValuePair<string, State>> GetEnumerator()
+    public IEnumerator<KeyValuePair<State, State>> GetEnumerator()
     {
-      return _fields.GetEnumerator();
+      return _items.GetEnumerator();
     }
 
     /// <inheritdoc/>
     IEnumerator IEnumerable.GetEnumerator()
     {
-      return _fields.GetEnumerator();
+      return _items.GetEnumerator();
     }
     #endregion
 
@@ -160,13 +161,13 @@ namespace Audune.Serialization
     /// <inheritdoc/>
     public bool Equals(ObjectState other)
     {
-      return other is not null && EqualityComparer<Dictionary<string, State>>.Default.Equals(_fields, other._fields);
+      return other is not null && EqualityComparer<Dictionary<State, State>>.Default.Equals(_items, other._items);
     }
 
     /// <inheritdoc/>
     public override int GetHashCode()
     {
-      return HashCode.Combine(_fields);
+      return HashCode.Combine(_items);
     }
 
 

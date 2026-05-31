@@ -134,7 +134,7 @@ namespace Audune.Serialization
       writer.WriteMapHeader(state.count);
       foreach (var field in state)
       {
-        writer.Write(field.Key);
+        Serialize(ref writer, field.Key, options);
         Serialize(ref writer, field.Value, options);
       }
     }
@@ -295,9 +295,9 @@ namespace Audune.Serialization
       var objectState = new ObjectState();
       for (var i = 0; i < length; i++)
       {
-        var name = reader.ReadString();
-        var state = Deserialize(ref reader, options);
-        objectState.Set(name, state);
+        var key = Deserialize(ref reader, options);
+        var value = Deserialize(ref reader, options);
+        objectState.Set(key, value);
       }
       return objectState;
     }

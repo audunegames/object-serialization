@@ -3,89 +3,89 @@ using System.Collections.Generic;
 namespace Audune.Serialization
 {
   /// <summary>
-  /// Interface that defines a state that contains fields of states with a <see cref="System.String"/> name.
+  /// Interface that defines a state that contains key-value pairs of states.
   /// </summary>
-  public interface IObjectState : IReadOnlyDictionary<string, State>
+  public interface IObjectState : IReadOnlyDictionary<State, State>
   {
     /// <summary>
-    /// Return the amount of fields in the state.
+    /// Return the amount of entries in the state.
     /// </summary>
     public int count { get; }
 
     /// <summary>
-    /// Return the keys of the fields in the state.
+    /// Return the keys of the entries in the state.
     /// </summary>
-    public IEnumerable<string> keys { get; }
+    public IEnumerable<State> keys { get; }
 
     /// <summary>
-    /// Return the values of the fields in the state.
+    /// Return the values of the entries in the state.
     /// </summary>
     public IEnumerable<State> values { get; }
 
-
+    
     /// <summary>
-    /// Return or set the field with the specified name.
+    /// Return or set the value with the specified key.
     /// </summary>
-    /// <param name="name">The field name to retrieve or set.</param>
-    public new State this[string name] {
-      get => Get(name); 
-      set => Set(name, value);
+    /// <param name="key">The key to retrieve or set.</param>
+    public new State this[State key] {
+      get => Get(key); 
+      set => Set(key, value);
     }
 
-
-    /// <summary>
-    /// Return the field with the specified name.
-    /// </summary>
-    /// <param name="name">The field name to retrieve.</param>
-    /// <param name="defaultValue">The value to return when a field with name <paramref name="name"/> does not exist.</param>
-    /// <returns>The field with the specified name.</returns>
-    public State Get(string name, State defaultValue = null);
     
     /// <summary>
-    /// Return the field with the specified name and type.
+    /// Return the value with the specified key.
     /// </summary>
-    /// <param name="name">The field name to retrieve.</param>
-    /// <param name="defaultValue">The value to return when a field with name <paramref name="name"/> does not exist or when the field value is not of the specified type.</param>
-    /// <typeparam name="TState">The type of the field value to get.</typeparam>
-    public TState Get<TState>(string name, TState defaultValue = null) where TState : State;
-    /// <returns>The value with the specified name.</returns>
+    /// <param name="key">The key to retrieve.</param>
+    /// <param name="defaultValue">The value to return when a value with key <paramref name="key"/> does not exist.</param>
+    /// <returns>The value with the specified key.</returns>
+    public State Get(State key, State defaultValue = null);
     
     /// <summary>
-    /// Return if a field with the specified name exists and store the field value in <paramref name="value"/>.
+    /// Return the value with the specified key and type.
     /// </summary>
-    /// <param name="name">The field name to retrieve.</param>
-    /// <param name="value">The field value with the specified name.</param>
-    /// <returns>If a field with the specified name exists.</returns>
-    public bool TryGet(string name, out State value);
+    /// <param name="key">The key to retrieve.</param>
+    /// <param name="defaultValue">The value to return when a value with key <paramref name="key"/> does not exist or when the value is not of the specified type.</param>
+    /// <typeparam name="TState">The type of the value to get.</typeparam>
+    /// <returns>The value with the specified key.</returns>
+    public TState Get<TState>(State key, TState defaultValue = null) where TState : State;
     
     /// <summary>
-    /// Return if a field with the specified name and type exists and store the field value in <paramref name="value"/>.
+    /// Return if a value with the specified key exists and store the value in <paramref name="value"/>.
     /// </summary>
-    /// <param name="name">The field name to retrieve.</param>
-    /// <param name="value">The field value with the specified name.</param>
-    /// <typeparam name="TState">The type of the field value to get.</typeparam>
-    /// <returns>If a field with the specified name and type exists.</returns>
-    public bool TryGet<TState>(string name, out TState value) where TState : State;
+    /// <param name="key">The key to retrieve.</param>
+    /// <param name="value">The value with the specified key.</param>
+    /// <returns>If a value with the specified key exists.</returns>
+    public bool TryGet(State key, out State value);
     
     /// <summary>
-    /// Set a field with the specified name in the state.
+    /// Return if a value with the specified key and type exists and store the value in <paramref name="value"/>.
     /// </summary>
-    /// <param name="name">The field name to set.</param>
-    /// <param name="value">The field value to set.</param>
-    public void Set(string name, State value);
+    /// <param name="key">The key to retrieve.</param>
+    /// <param name="value">The value with the specified key.</param>
+    /// <typeparam name="TState">The type of the value to get.</typeparam>
+    /// <returns>If a value with the specified key and type exists.</returns>
+    public bool TryGet<TState>(State key, out TState value) where TState : State;
     
     /// <summary>
-    /// Remove the field with the specified name from the state.
+    /// Set a value with the specified key in the state.
     /// </summary>
-    /// <param name="name">The field name to remove.</param>
-    public void Remove(string name);
+    /// <param name="key">The key to set.</param>
+    /// <param name="value">The value to set.</param>
+    public void Set(State key, State value);
     
     /// <summary>
-    /// Return if the state contains a field with the specified name.
+    /// Remove the value with the specified key from the state.
     /// </summary>
-    /// <param name="name">The field name to check.</param>
-    /// <returns>If the state contains a field with the specified name.</returns>
-    public new bool ContainsKey(string name);
+    /// <param name="key">The key to remove.</param>
+    public void Remove(State key);
+    
+    /// <summary>
+    /// Return if the state contains a value with the specified key
+    /// </summary>
+    /// <param name="key">The key to check.</param>
+    /// <returns>If the state contains a value with the specified key.</returns>
+    public new bool ContainsKey(State key);
     
     /// <summary>
     /// Return if the state contains a field with the specified value.
