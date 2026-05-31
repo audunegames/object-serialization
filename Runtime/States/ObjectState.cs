@@ -38,11 +38,14 @@ namespace Audune.Serialization
     IEnumerable<State> IReadOnlyDictionary<string, State>.Values => values;
 
 
-    // Constructor
-    public ObjectState(IEnumerable<KeyValuePair<string, State>> items = null)
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="enumerable">The enumerable whose items are copied to the new state.</param>
+    public ObjectState(IEnumerable<KeyValuePair<string, State>> enumerable = null)
     {
-      if (items != null)
-        _fields = new Dictionary<string, State>(items);
+      if (enumerable != null)
+        _fields = new Dictionary<string, State>(enumerable);
       else
         _fields = new Dictionary<string, State>();
     }

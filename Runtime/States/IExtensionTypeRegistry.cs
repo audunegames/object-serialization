@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace Audune.Serialization
 {
   /// <summary>
-  /// Interface that defines a registry for extenstion types.
+  /// Interface that defines a registry for extension types.
   /// </summary>
   public interface IExtensionTypeRegistry
   {

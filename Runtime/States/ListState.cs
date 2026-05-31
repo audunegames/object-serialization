@@ -26,11 +26,14 @@ namespace Audune.Serialization
     State IReadOnlyList<State>.this[int index] => ((IListState)this)[index];
 
 
-    // Constructor
-    public ListState(IEnumerable<State> items = null) 
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="enumerable">The enumerable whose items are copied to the new state.</param>
+    public ListState(IEnumerable<State> enumerable = null) 
     { 
-      if (items != null)
-        _items = new List<State>(items);
+      if (enumerable != null)
+        _items = new List<State>(enumerable);
       else
         _items = new List<State>();
     }

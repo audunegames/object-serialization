@@ -129,13 +129,7 @@ namespace Audune.Serialization
     #endregion
 
     #region Serializing objects
-    /// <summary>
-    /// Serialize the specified object to a state.
-    /// </summary>
-    /// <param name="value">The value to deserialize.</param>
-    /// <typeparam name="T">The type of the value to deserialize.</typeparam>
-    /// <returns>The serialized state.</returns>
-    /// <exception cref="SerializingException">If the serialization failed.</exception>
+    /// <inheritdoc/>
     public State Serialize<T>(T value)
     {
       if (value is ISerializable serializableValue)
@@ -152,13 +146,7 @@ namespace Audune.Serialization
     #endregion
 
     #region Deserializing objects
-    /// <summary>
-    /// Deserialize the specified state to a new object.
-    /// </summary>
-    /// <param name="state">The state to deserialize.</param>
-    /// <typeparam name="T">The type of the value to deserialize.</typeparam>
-    /// <returns>The deserialized object.</returns>
-    /// <exception cref="DeserializingException">If the deserialization failed.</exception>
+    /// <inheritdoc/>
     public T Deserialize<T>(State state)
     {
       if (typeof(IDeserializable).IsAssignableFrom(typeof(T)))
@@ -184,13 +172,7 @@ namespace Audune.Serialization
       return typeAdapter.FromState(state);
     }
 
-    /// <summary>
-    /// Deserialize the specified state into an existing object.
-    /// </summary>
-    /// <param name="state">The state to deserialize.</param>
-    /// <param name="value">The existing object to deserialize the state into.</param>
-    /// <typeparam name="T">The type of the value to deserialize.</typeparam>
-    /// <exception cref="DeserializingException">If the deserialization failed.</exception>
+    /// <inheritdoc/>
     public void Deserialize<T>(State state, T value)
     {
       if (value is IDeserializable deserializableValue)

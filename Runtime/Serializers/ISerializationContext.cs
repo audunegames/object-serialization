@@ -11,6 +11,7 @@ namespace Audune.Serialization
     /// <param name="value">The value to deserialize.</param>
     /// <typeparam name="T">The type of the value to deserialize.</typeparam>
     /// <returns>The serialized state.</returns>
+    /// <exception cref="SerializingException">If the serialization failed.</exception>
     public State Serialize<T>(T value);
   }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace Audune.Serialization
 {
   /// <summary>
-  /// Interface that defines a state that contains fields of states with a <see cref="System.String"/> ma,e.
+  /// Interface that defines a state that contains fields of states with a <see cref="System.String"/> name.
   /// </summary>
   public interface IObjectState : IReadOnlyDictionary<string, State>
   {
@@ -47,8 +47,8 @@ namespace Audune.Serialization
     /// <param name="name">The field name to retrieve.</param>
     /// <param name="defaultValue">The value to return when a field with name <paramref name="name"/> does not exist or when the field value is not of the specified type.</param>
     /// <typeparam name="TState">The type of the field value to get.</typeparam>
-    /// <returns></returns>
     public TState Get<TState>(string name, TState defaultValue = null) where TState : State;
+    /// <returns>The value with the specified name.</returns>
     
     /// <summary>
     /// Return if a field with the specified name exists and store the field value in <paramref name="value"/>.
