@@ -80,16 +80,16 @@ namespace Audune.Serialization
     /// Create a new <see cref="ListState"/> and set it with the specified field name in the specified object state.
     /// </summary>
     /// <param name="state">The object state to set the new <see cref="ListState"/> in.</param>
-    /// <param name="name">The field name to set.</param>
+    /// <param name="key">The key to set.</param>
     /// <returns>The newly created <see cref="ListState"/>.</returns>
     /// <exception cref="ArgumentNullException">If <paramref name="state"/> is <see langword="null"/>.</exception>
-    public static ListState SetNewList(this IObjectState state, string name)
+    public static ListState SetNewList(this IObjectState state, State key)
     {
       if (state == null)
         throw new ArgumentNullException(nameof(state));
       
       var listState = new ListState();
-      state.Set(name, listState);
+      state.Set(key, listState);
       return listState;
     }
 
@@ -97,16 +97,16 @@ namespace Audune.Serialization
     /// Create a new <see cref="ObjectState"/> and set it with the specified field name in the specified object state.
     /// </summary>
     /// <param name="state">The object state to set the new <see cref="ObjectState"/> in.</param>
-    /// <param name="name">The field name to set.</param>
+    /// <param name="key">The key to set.</param>
     /// <returns>The newly created <see cref="ObjectState"/>.</returns>
     /// <exception cref="ArgumentNullException">If <paramref name="state"/> is <see langword="null"/>.</exception>
-    public static ObjectState SetNewObject(this IObjectState state, string name)
+    public static ObjectState SetNewObject(this IObjectState state, State key)
     {
       if (state == null)
         throw new ArgumentNullException(nameof(state));
       
       var objectState = new ObjectState();
-      state.Set(name, objectState);
+      state.Set(key, objectState);
       return objectState;
     }
     #endregion
